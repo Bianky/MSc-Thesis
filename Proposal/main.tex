@@ -15,25 +15,24 @@
 \usepackage{float}
 
 % packages used for references ---------------------------------------------
+\usepackage{xcolor} % Load this for color definitions
 \usepackage{natbib}
-\usepackage[colorlinks, allcolors=gray]{hyperref}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = gray,
+    citecolor = gray,
+    urlcolor  = gray
+}
 \bibliographystyle{apalike}
 
 
 % package used for degree symbol -------------------------------------------
 \usepackage{textcomp, gensymb}
 
+
 % packages used for tables -------------------------------------------------
 \usepackage{multirow, makecell, booktabs,longtable,array,ragged2e, graphicx, chngpage, afterpage, geometry, color}
-
-% table commands
-\newcommand{\mc}[2]{\multicolumn{#1}{c}{#2}}
-\newcolumntype{P}[1]{>{\RaggedRight\hspace{0pt}}p{#1}}
-\providecommand\ch[1]{#1} 
-
-\usepackage{lscape}
-\usepackage[table,xcdraw]{xcolor}
-\usepackage{numprint}
 
 % package used for caption -----------------------------------------------
 \usepackage[format=hang,font=small,labelfont=bf]{caption}
