@@ -7,31 +7,36 @@
 % •	Clearly describe any ground truth or reference data, e.g., how to access and how/what to collect
 % •	page indication: 2 
 
-\subsection{Location}
+\subsection{Study Area}
 This research will be carried out in dry tropical forest located in Nizanda (16°39′ N, 95°00′ W), Mexican province of Oxaca and in the wet tropical forest located in Loma Bonita (16°01’ N, 90°55’), Mexican province of Chiapas. 
 
 The dry tropical forest has a mean annual temperature of 27.7°C with a mean annual precipitation of 900mm. It is characterized as dry tropical deciduous forest \citep{hordijkLandUseHistory2024}. 
 
 The wet forest has a mean annual temperature of 24°C and a mean annual precipitation of 3000mm. The vegetation varies between semideciduous and lowland tropical rain forest \citep{hordijkLandUseHistory2024}.
 
-There is 13 (25m x 25m) plots established in the dry tropical forest and 20 (25m x 25m) in the wet tropical forest. These plots were established on an recently abandoned pasture or agricultural land by the PANTROP project in 2020 \citep{hordijkLandUseHistory2024}.
+There is 20 (25m x 25m) plots established in both the dry and wet tropical forest. These plots were established on an recently abandoned pasture or agricultural land by the PANTROP project in March 2020 \citep{hordijkLandUseHistory2024}. If needed, plots were fenced off to prevent grazing. 
 
-This research will be composed of a fieldwork and a spatial analysis. The fieldwork will serve for data collection on the seed variables, and the spatial analysis will be a mean to acquire insights into the forest landscape variables. 
-Additionally, the PANTROP database will be used to access historical data from previous years. 
 
-\subsection{Fieldwork}
-For this research, a fieldwork will be conducted in the dry tropical forest in Nizanda, Mexico. During the fieldwork, litter traps containing plant litter and seeds will be collected. This litter will be dried, weighted and sorted into leaves, twigs, reproductive tissue and others. 
-Subsequently, seed counting and identification will be performed with a seed catalogue provided by UNAM in the laboratory in Morelia. The seeds will be classified into life form groups such as herbs, grasses and trees. Subsequentially, absed on literature, their mode of dispersal will be identified.
 
+\subsection{Data Collection}
+
+\subsubsection{Seeds}
+To evaluate the seed diversity and dispersal mode in both forest sites (wet and dry), four litter traps of 50cm x 50cm were established in each plot. The litter traps were positioned 6m from the plot's edge in each corner of the plots. The litter is collected monthly since the establishment of the plots and the content of the four traps are combined into one sample per plot. 
+Once it is collected, the litter traps are dried, weighted and sorted into leaves, twigs, reproductive tissues and others. Subsequently, seed counting and identification is performed with a seed catalogue provided by UNAM and with a support of an expert in the laboratory in Morelia. The seeds are classified into life form groups such as herbs, grasses and trees. Based on literature, the mode of dispersal is identified. 
+
+For this research, a fieldwork will be conducted in the dry tropical forest in Nizanda, Mexico. 
 Unfortunately, it is not possible to conduct fieldwork in the wet tropical forest in Loma Bonita due to the political situation at place. However, a data on wet tropical forest will be retrieved from the PANTROP project database to be able to analyse and compare wet and dry tropical forest.
 
-\subsection{Spatial analysis}
-Landsat satellite imagery will be used for data acquiry on the forest landscape factors. Namely, forest age, forest cover and forest connectivity. Additionally, the forest landscape factors will be calculated using a time-series algorithm called AVOCADO. 
+\subsubsection{Forest Landscape Factors}
+Landsat satellite imagery will be used for data acquiry on the forest landscape factors. Namely, forest age, forest cover and forest connectivity. Additionally, the forest landscape factors will be calculated using a time-series algorithm called AVOCADO and R packages landscapemetric and lconnect.
 
-In general, such new methods are promising in
-smallholder agricultural landscapes, that are characterized by complex
-forest dynamics caused by shifting cultivation, forest degradation and
-large variety of agroecosystems
+\subsection{Analysis}
+To investigate the relationship Linear Mixed Model will be performed on dependent variable: seed richness, seed evenness and seed dispersal mode and the independent variables: forest age, cover and forest connectivity. The model will be evaluated using R2, RMSE and bias.
 
-Normalised difference moisture index (NDMI) at 40m pixel resolution
+%In general, such new methods are promising in
+%smallholder agricultural landscapes, that are %characterized by complex
+%forest dynamics caused by shifting cultivation, forest degradation and
+%large variety of agroecosystems
+
+%Normalised difference moisture index (NDMI) at 40m pixel resolution
  
