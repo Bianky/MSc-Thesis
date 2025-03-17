@@ -8,28 +8,28 @@
 % •	page indication: 2 
 
 \subsection{Study Area}
-This research will be carried out in dry tropical forest located in Nizanda (16°39′ N, 95°00′ W), Mexican province of Oaxaca and in the wet tropical forest located in Loma Bonita (16°01’ N, 90°55’), Mexican province of Chiapas. 
+This research will be carried out in dry tropical forest located in Nizanda (16°39' N, 95°00' W), Mexican province of Oaxaca and in the wet tropical forest located in Loma Bonita (16°01' N, 90°55'), Mexican province of Chiapas. 
 
-The dry tropical forest has a mean annual temperature of 27.7°C with a mean annual precipitation of 900mm. It is characterized as dry tropical deciduous forest \citep{hordijkLandUseHistory2024}. 
+The dry tropical forest has a mean annual temperature of 27.7°C with a mean annual precipitation of 900~mm. It is characterized as dry tropical deciduous forest \citep{hordijkLandUseHistory2024}. 
 
-The wet forest has a mean annual temperature of 24°C and a mean annual precipitation of 3000mm. The vegetation varies between semideciduous and lowland tropical rain forest \citep{hordijkLandUseHistory2024}.
+The wet forest has a mean annual temperature of 24°C and a mean annual precipitation of 3000~mm. The vegetation varies between semideciduous and lowland tropical rain forest \citep{hordijkLandUseHistory2024}.
 
-There are 20 (25m x 25m) plots established in both the dry and wet tropical forest. These plots were established on an recently abandoned pasture or agricultural land by the PANTROP project in March 2020 \citep{hordijkLandUseHistory2024}. If needed, plots were fenced off to prevent grazing. 
+There are twenty (25~m x 25~m) plots established in both the dry and wet tropical forest. These plots were established on recently abandoned pasture or agricultural land by the PANTROP project in March 2020 \citep{hordijkLandUseHistory2024}. If needed, plots were fenced off to prevent grazing. 
 
 
 \subsection{Data Collection}
 
 \subsubsection{Seeds}
-To evaluate the seed diversity and dispersal mode in both forest sites (wet and dry), four seed traps of 50cm x 50cm were established in each plot. The litter traps were positioned 6m from the plot's edge in each corner of the plots. The litter is collected monthly since the establishment of the traps between February and April 2022 and the content of the four traps are combined into one sample per plot. 
-Subsequently, the collected material is dried, weighted and sorted into leaves, twigs, reproductive tissues and others. Subsequently, seed counting and identification is performed with a seed catalogue provided by UNAM and with a support of Marina ..., expert in tropical seeds,in the laboratory in Morelia to evaluate seed richness, evenness and dispersal mode. The mode of dispersal is based on literature.
+To evaluate the seed diversity and dispersal mode in both forest sites (wet and dry), four seed traps of 50~cm x 50~cm were established in each plot. The seed traps were positioned 6~m from the plot's edge in each corner of the plots. The seeds were collected monthly for a duration of one year in 2023. The content of the four traps was combined into one sample per plot.
+Subsequently, the collected material was dried, weighted and sorted into leaves, twigs, reproductive tissues and others. The collected seeds were counted, weighted and identified with a seed catalogue provided by UNAM and with the support of the research assistant Marina Beatriz Hernandez Mendez, an expert in tropical seed identification. This is done in the laboratory in Morelia, Michoacan, in order to evaluate seed richness, evenness and dispersal mode. The mode of dispersal is based on literature.
 
 % For this research, a fieldwork will be conducted in the dry tropical forest in Nizanda, Mexico. 
 % Unfortunately, it is not possible to conduct fieldwork in the wet tropical forest in Loma Bonita due to the political situation at place. However, data on wet tropical forest and historical data on both sites will be retrieved from the PANTROP project database to be able to analyse and compare wet and dry tropical forest.
 
 \subsubsection{Forest Landscape Factors}
-The forest landscape factors (forest age, cover and connectivity) will be assessed using the AVOCADO (Anomaly Vegetation Change Detection) algorithm and R software. The AVOCADO algorithm is designed to detect forest disturbance and regrowth based on satellite imagery \citep{decuyperContinuousMonitoringForest2022}. The result of the AVOCADO algorithm is a raster map with indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R. The satellite image used will be LANDSAT NDMI images. 
+The forest landscape factors (forest age, cover and connectivity) will be assessed using the AVOCADO (Anomaly Vegetation Change Detection) algorithm and R software. The AVOCADO algorithm is designed to detect forest disturbance and regrowth based on satellite imagery \citep{decuyperContinuousMonitoringForest2022}. The result of the AVOCADO algorithm is a raster map with indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R \citep{mestreLconnectPackageVersatile2023, hesselbarthLandscapemetricsOpensourceTool2019}. The satellite imagery used will be Landsat NDMI images. 
 
 \subsection{Analysis}
-To investigate how seed richness, evenness and seed sipersal mode are effected by forest age, cover and connectivity, a Linear Mixed Model will be performed. The model will be evaluated using R2, RMSE and bias.
+To investigate how seed richness, evenness and seed dipersal mode are affected by forest age, cover and connectivity, a Linear Mixed Model will be performed. The model will be evaluated using $R^2$, RMSE and AIC.
 
  
