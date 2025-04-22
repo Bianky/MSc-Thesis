@@ -37,7 +37,8 @@ The AVOCADO algorithm uses a reference vegetation from a nearby pixel known to h
 
 The input to the AVOCADO algorithn will be Landsat derived Normalized Difference Moisture Index (NDMI) image. Landsat is selected due to its long historical archive. While Landsat spatial resolution (30m) is sometimes considered a hindrance compared to its temporal resolution, this is not a significant limitation for the current study, as the resolution is comparable to the spatial scale of the investigated forest plots (25m). NDMI, derived from Lndsat's near-infrared and shortwave infrared bands, is used as it is sensitive to changes in vegetation moisture and canopy structure. This makes NDMI particularly effective for detecting forest disturbances and regrowth.
 
-The output of the algorithm is a raster map with an indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R \citep{mestreLconnectPackageVersatile2023, hesselbarthLandscapemetricsOpensourceTool2019}. The satellite imagery used will be Landsat NDMI images. 
+The output of the algorithm is a raster map with an indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R \citep{mestreLconnectPackageVersatile2023, hesselbarthLandscapemetricsOpensourceTool2019}. The satellite imagery used will be Landsat NDMI images.
+\citep{gore}
 
 The evaluation will be performed in R software \citep{R}.
 
