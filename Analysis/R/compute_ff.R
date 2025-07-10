@@ -25,12 +25,13 @@ compute_ff <- function(data_folder){
   # if value is not 100, 101, subtract it from 2022 to calculate forest age
   vals[!(vals %in% c(100, 101))] <- 2022 - vals[!(vals %in% c(100, 101))]
   
+  vals[vals < 15 | vals == 15] <- 1
+  vals[vals < 30 & vals > 15] <- 2
+  vals[vals == 101] <- 3 # never deforested area
   vals[vals == 100] <- 0 # non forest areas
-  vals[vals == 101] <- 31 # old growth forest
-  
   
   values(forest_mosaic) <- vals
-  
+
   rasters_list <- list()
   
   # create a separate raster for each research unit
@@ -43,36 +44,67 @@ compute_ff <- function(data_folder){
     rasters_list[[as.character(ID)]] <- cropped_raster
   }
   
+  # calculate the percentage of each age
+  perc_age <- lapply(names(rasters_list), function(name) {
+    rast <- rasters_list[[name]]
+    freq_tb <- freq(rast)
+    total <- sum(freq_tb[freq_tb[, "value"] != 0, "count"])
+    
+    freq_tb$percent <- ifelse(freq_tb[, "value"] != 0,
+                              freq_tb[, "count"] / total ,
+                              0)
+    
+    freq_tb <- freq_tb %>%
+      dplyr::select(-count, -layer) %>%
+      pivot_wider(names_from = value, values_from = percent) %>% 
+      rename(early = `1`, 
+             late = `2`, 
+             old = `3`)
+    
+    # add raster name as plot id
+    freq_tb$plot_id <- name
+    
+    return(freq_tb)
+  })
+  
+  age_percentage <- bind_rows(perc_age)
+  
   # calculate the mean age of each research unit
   mean_age <- sapply(rasters_list, function(rast) {
+    rast[rast == 0] <- NA
     global(rast, fun = "mean", na.rm = TRUE)[1,1]
   })
+  
   # store the mean age per research unit in a table format
   age <- tibble(
     plot_id = names(mean_age),
-    mean_age = as.numeric(mean_age)
+    mean_age = round(as.numeric(mean_age), 0)
   )
   
   # set all forest values to 1 and non-forest values to 0
+  vals <- terra::values(forest_mosaic) # extract all values
   vals[vals > 0] <- 1
   values(forest_mosaic) <- vals
   
   # calculate forest area
   area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
     filter(class == 1) %>% 
-    pivot_wider(names_from = metric, values_from = value) 
+    pivot_wider(names_from = metric, values_from = value) %>% 
+    mutate(pland = pland/100)
   
-  # calcualte forest connectivity
+  # calculate forest connectivity
   connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(enn_mn = replace_na(enn_mn, 0), 
-           total_enn = enn_mn * np)
+           total_enn = enn_mn * np, 
+           enn_mn_inv = 1/enn_mn)
   
   # merge all variables together
-  age_area <- full_join(age, area, join_by(plot_id))
-  forest_factors <- full_join(age_area, connectivity) %>% 
-    dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, enn_mn, np, total_enn)
+  age_area <- full_join(age, area)
+  age_area_perc <- full_join(age_area, age_percentage)
+  forest_factors <- full_join(age_area_perc, connectivity) %>% 
+      dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late, old)
   
   write.csv(forest_factors, file.path(data_folder, "11_forest_factors.csv"))
   

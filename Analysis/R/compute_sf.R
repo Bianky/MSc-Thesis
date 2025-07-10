@@ -10,7 +10,7 @@ compute_sf <- function(data_folder){
   richness <- seeds %>%
     group_by(ID) %>%
     summarise(
-      abundance = sum(as.numeric(Count_seeds)),
+      abundance = sum(as.numeric(Count_seeds), na.rm = T),
       richness = length(unique(Species)), 
       .groups = "drop")
   
@@ -20,7 +20,7 @@ compute_sf <- function(data_folder){
     count(ID, `Dispersal mode`, name = "dispersal_n") %>%
     group_by(ID) %>% 
     mutate(dispersal_sum = sum(dispersal_n),
-           dispersal_n = dispersal_n/dispersal_sum) %>% 
+           dispersal_n = (dispersal_n/dispersal_sum*100)) %>% 
     ungroup() %>% 
     pivot_wider(names_from = `Dispersal mode`, values_from = dispersal_n, values_fill = 0) %>% 
     rename(dispersal_abiotic = Abiotic, 
@@ -34,7 +34,7 @@ compute_sf <- function(data_folder){
     count(ID, Guild, name = "guild_n") %>%
     group_by(ID) %>% 
     mutate(guild_sum = sum(guild_n),
-           guild_n = guild_n/guild_sum) %>% 
+           guild_n = (guild_n/guild_sum*100)) %>% 
     ungroup() %>% 
     pivot_wider(names_from = Guild, values_from = guild_n, values_fill = 0) %>% 
     rename(guild_generalist = Generalist, 
