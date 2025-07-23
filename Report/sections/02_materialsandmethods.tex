@@ -1,0 +1,57 @@
+
+% METHODOLOGY
+% •	Study area description, if any
+% •	Justify certain choices of methods and datasets
+% •	Be clear on what will be investigated using what metrics. For example, the research will study the uptake of solar panel installation for different provinces by comparing the number of households that have solar panel installations since 2015. 
+% •	Be clear on how to validate the results and using what metrics. For example, assess the accuracy of detecting solar panels using overall accuracy, user’s accuracy, precision, etc.,
+% •	Clearly describe any ground truth or reference data, e.g., how to access and how/what to collect
+% •	page indication: 2 
+
+\subsection{Study sites}
+This research was carried out in dry tropical forest at an elevation of 90-120~m a.s.l. located in the area of Nizanda (16°39' N, 95°00' W), Mexican province of Oaxaca and in the wet tropical forest at an elevation of 115-300~m a.s.l. located in the area of Loma Bonita (16°01' N, 90°55'), Mexican province of Chiapas. 
+
+The dry tropical forest has a mean annual temperature of 27.7°C and seasonal rainfall with a mean annual precipitation of 900~mm where 90\% of the total annual rainfall occurs between May and October. It is characterized as dry tropical deciduous forest \citep{hordijkLandUseHistory2024}. 
+
+The wet forest has a mean annual temperature of 24°C and a mean annual precipitation of 3000~mm with a relative dry season between February and April accounting for less than 10\% of the total annual rainfall. The vegetation varies between semi-deciduous and lowland tropical rain forest \citep{hordijkLandUseHistory2024}.
+
+There are twenty (25~m x 25~m) research plots established in both the dry and wet tropical forest. These plots were established on a recently abandoned (0-10 months following abandonment) pasture or agricultural land by the PANTROP project in March 2020 \citep{hordijkLandUseHistory2024}. If needed, plots were fenced off to prevent grazing. (question regarding restriction of biotic dispersal?)
+
+
+\subsection{Seed}
+To evaluate the seed diversity and dispersal mode in both forest sites (wet and dry), four seed traps were established in each plot. In the dry forest, the seed traps were rectangular with the dimensions of 50~cm x 50~cm and in the wet tropical forest, the seed traps were circular with the diameter of 1~m. The seed traps were positioned 6~m from the plot's edge in each corner of the plots. The seeds were collected monthly for a duration of one year in 2023. The content of the four traps was combined into one sample per plot.
+
+Subsequently, the collected seeds were separated into groups of unique species and identified per species. Based on literature, each species was described by their dispersal mode (biotic/abiotic) and guild (pioneer/shadetolerant/generalist). The seperation and identification of seed species was performed with a seed catalog provided by Universidad Nacional Autonóma de México (UNAM) and with the support of research assistant Marina Beatriz Hernandez Mendez, an expert in tropical wet forest seed identification, and Gerardo Luis Cervantes Jiménez, an expert in tropical dry forest seed identification. 
+
+In the context of this research, the seed attributes are defined as follows: 1) \textbf{seed richness}: number of unique species, 2) \textbf{seed dispersal mode}: the biotic or abiotic method by which a seed is dispersed  3) \textbf{seed guild}: the guild (pioneer/shadetolerant/generalist) to which a species belongs based on the characteristics of the species' resource use.
+
+\subsection{Landscape}
+To evaluate the forest landscape attributes, remote sensing techniques were be employed, as historical field data is scarce and interview-based data can be unreliable and difficult to obtain \citep{decuyperContinuousMonitoringForest2022}. In this context, the forest landscape factors are defined as follows: 1) \textbf{forest age}: the number of years a forest remained undisturbed, up to a maximum of 32 years (the limit of satellite imagery), 2) \textbf{forest cover}: the percentage of surrounding forest within a given radius, 3) \textbf{forest connectivity}: the percentage of patches adjacent to each other. 
+These factors will be assessed using the Anomaly Vegetation Change Detection (AVOCADO) algorithm, which is based on the R package "npphen" and with the R package "landscapemetrics" \citep{decuyperContinuousMonitoringForest2022, chavez2017npphen, hesselbarth2019landscapemetrics}. 
+
+\subsubsection{AVOCADO algorithm}
+AVOCADO is an algorithm designed to detect forest disturbance and regrowth based on satellite imagery in a semi-automated and continuous manner \citep{decuyperContinuousMonitoringForest2022}. It utilizes all available data without requiring outlier removal. AVOCADO uses reference vegetation from a nearby pixel known to have remained undisturbed throughout the time series. This reference pixel will be selected with the help of an expert with a long-term field experience in the area. As a time series algorithm, AVOCADO analyzes more than two satellite images to detect a change. Compared to bi-temporal difference or supervised image classification methods, time series approaches offer greater precision in detecting small-scale forest changes by capturing the dynamic behavior of vegetation over time. This advantage is essential when analyzing forest change dynamics within a smallholder agricultural landscape, such as the one investigated in this research, which is often characterized by complex vegetation dynamics caused by forest degradation and shifting cultivation. Unlike many other traditional time series algorithms, AVOCADO holds an additional benefit in being able to detect more than one disturbance or regrowth. Moreover, time series methods such as temporal segmentation and trend analysis resolve this issue by applying parametric functions. These time series, however, rely on the assumption of a regular phenological cycles. Instead, AVOCADO uses the observed frequency values which enable for a greater flexibility to adapt to site specific conditions and account for natural phenological variability \citep{decuyperContinuousMonitoringForest2022}. Due to these traits, AVOCADO is a suitable algorithm for detection of forest age, cover, and connectivity as it continuously and flexibly monitors vegetation dynamics over time and detects multiple disturbances and regrowth events in complex, smallholder landscapes.
+
+\subsubsection{Satellite imagery}
+The input to the AVOCADO algorithm will be Landsat derived Normalized Difference Moisture Index (NDMI) image. Landsat is selected due to its long historical archive. While Landsat spatial resolution (30m) is sometimes considered a hindrance compared to its temporal resolution, this is not a significant limitation for this study, as the resolution is comparable to the spatial scale of the investigated forest plots (25m). NDMI (\ref{eq:NDMI}), derived from Landsat's near-infrared and short-wave infrared bands, will be used as it is able to capture gradual changes and regrowth in contrast to NDVI \citep{vermotePreliminaryAnalysisPerformance2016}. 
+
+\begin{align}
+\label{eq:NDMI}
+NDMI = \frac{\text{NIR} - \text{SWIR}}{\text{NIR} + \text{SWIR}}
+\end{align}
+
+All level-2 terrain-corrected Landsat scenes will be downloaded and pre-processed via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017}. The pre-processing steps will involve the exclusion of images with cloud cover higher than 70\% and clipping of the images by the area of interest. The time series used range from beginning of 1990 to the end of 2022. The exact number of scenes is to be determined. 
+
+% question to still answer:
+%% how to exclude non-forest areas?
+%% how to take into account the recent changes?
+
+\subsubsection{Landscapemetrics}
+The output of the AVOCADO algorithm is a raster map with an indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R \citep{mestreLconnectPackageVersatile2023, hesselbarthLandscapemetricsOpensourceTool2019}. Additionally, a land cover map will be used to verify non-forest areas. The output of this section will be a table.
+
+\subsection{Statistical analysis}
+To investigate how seed richness, evenness and seed dipersal mode are affected by forest age, cover and connectivity, a Linear Mixed Model (LMM) will be performed. Linear mixed model is used to account for the nonindependent nature of the field plots, which occur in the same area and likely share highly similar environmental conditions. These field plots will be recognized as random effects of the model. Moreover, the forest landscape attributes (forest age, forest cover and forest connectivity) will be recognized as fixed effects (independent variables), whereas the seed attributes (seed richness, seed evenness and seed dispersal) will be recognized as the dependent variables. Nine models will be performed, each examining a relationship between one independent variable (forest age, forest cover, forest connectivity)  and one dependent variable (seed richness, seed evenness, seed dispersal). The model will be evaluated using $r^2$, RMSE and AIC. Additionally, p-values will be used to evaluate the significance of the predictor variables with a 0.05 level of significance. K-fold cross validation method will be applied to assess model's predictive performance. The data will be divided into k folds (the exact number of folds is to be determined), where each fold will be used for validation and the remainder of the data will serve for model's training. RMSE will be calculated for each fold and the average will be reported to assess the overall predictive performance.
+To answer the research questions, the $r^2$ will be discussed to determine how much variance in predicted variable is explained by the predictor variable, while p-values will assess the statistical significance of the relationships. Finally, RMSE willl be used to evaluate the real-world applicability of the model's predictions.  
+
+The evaluation will be performed in R software \citep{R}.
+
+ 
