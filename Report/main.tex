@@ -1,14 +1,88 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
 
-\title{MSc Thesis}
-\author{Bianka Fábryová}
-\date{February 2025}
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={165mm, 216mm}]{geometry}
 
+% package for language setting ---------------------------------------------
+\usepackage[english]{babel}
+
+% package used for paragraph formatting ------------------------------------
+\usepackage{parskip, fancyhdr, url, rotating, appendix}
+
+% packages used for images -------------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{float}
+
+% packages used for references ---------------------------------------------
+\usepackage{xcolor} % Load this for color definitions
+\usepackage{natbib}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = gray,
+    citecolor = gray,
+    urlcolor  = gray
+}
+\bibliographystyle{apalike}
+
+% package for eqations -----------------------------------------------------
+\usepackage{amsmath}
+
+
+% package used for degree symbol -------------------------------------------
+\usepackage{textcomp, gensymb}
+
+
+% packages used for tables -------------------------------------------------
+\usepackage{multirow, makecell, booktabs,longtable,array,ragged2e, graphicx, chngpage, afterpage, geometry, color}
+
+% package used for caption -----------------------------------------------
+\usepackage[format=hang,font=small,labelfont=bf]{caption}
+\captionsetup{justification   = raggedright,
+              singlelinecheck = false}
+              
+
+% no indentation
+\setlength\parindent{0pt}
+
+% set running headings on each page
+% https://www.overleaf.com/learn/latex/Headers_and_footers
+\pagestyle{headings}
+\pagestyle{fancy}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+
+% 2500 - 3000 words
 \begin{document}
 
-\maketitle
+%\BgThispage
+\input{titlepage}
 
+\newpage
+\tableofcontents
+
+\newpage
 \section{Introduction}
+\input{Report/sections/01_introduction}
+
+\section{Methodology}
+\input{Report/sections/02_materialsandmethods}
+
+\section{Results}
+\input{Report/sections/03_results}
+
+\section{Discussion}
+\input{Report/sections/04_discussion}
+
+\section{Conclusion}
+\input{Report/sections/05_conclusion}
+
+\section{Appendix}
+\input{Report/sections/06_appendix}
+
+\newpage
+\bibliography{references}
 
 \end{document}
