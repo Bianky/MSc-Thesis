@@ -22,7 +22,7 @@ The dry tropical forest has a mean annual temperature of 27.7°C and seasonal ra
 
 There are twenty (25~m x 25~m) research plots established in both the dry and wet tropical forest. These plots were established on a recently abandoned (0-10 months following abandonment) pasture or agricultural land by the PANTROP project in March 2020 \citep{hordijkLandUseHistory2024}. In neotropics, shifting agriculture or also known as slash and burn agriculture has been a common agricultural practice which after depletion of resources results in land abandonment \citep{jakovacRoleLanduseHistory2021}. If needed, plots were fenced off to prevent grazing. 
 
-The extent of the study area is approximately 3 x 2 km for the dry forest and 3 x 5 km for the wet forest, however in order to be able to measure the characteristics of the surrounding landscape a buffer of 1 km was taken around each plot resulting in an area of approximately 5 x 5 km for the dry forest and 7 x 6 km for the wet forest.
+The extent of the study area is approximately 3~km x 2~km for the dry forest and 3~km x 5~km for the wet forest, however in order to be able to measure the characteristics of the surrounding landscape a buffer of 1~km was taken around each plot resulting in an area of approximately 5~km x 5~km for the dry forest and 7~km x 6~km for the wet forest.
 
 \subsection{Data}
 
@@ -52,38 +52,60 @@ To  assess the forest surrounding the research plots, the following forest varia
 %Why 30 years?
 %Remote sensing techniques have become an invaluable tool for assessment of landscape. With historical field data being scarce and interview-based data being unreliable and difficult to obtain, remote sensing techniques offer a robust method for analysis of landscapes with large spatial extents \citep{decuyperContinuousMonitoringForest2022}.
 
-In this research, images from Landsat 5 Thematic Mapper (TM), Landsat 7 Enhanced Thematic Mapper Plus (ETM+) and Landsat 8 Operational Land Imager (OLI) were used to assess the forest age based on the AVOCADO algorithm detecting disturbance and regrowth \citep{decuyperContinuousMonitoringForest2022}. The Landsat archive of the United States Geology Survey was selected due to its rich temporal extent dating back to the beginning of the 1970s \citep{kennedyBringingEcologicalView2014, finerCombatingDeforestationSatellite2018}. While Landsat spatial resolution (30m) is sometimes considered a hindrance compared to its temporal resolution, this is not a significant limitation for this study, as the resolution is comparable to the spatial extent of the investigated research plots (25m).
-The time series stack ranges from 1992 – 2022 with 719 scenes (WRS path/row – 20-21/49)  for the dry tropical forest and 572 scenes (WRS2 path/row – 22-23/48-49) for the wet tropical forest. The lower time series limit is due to the scarcity and unreliability of Landsat data from before the 1990s and the upper limit is due to the fact that the year after the seeds were gathered. Hence we wanted to test for the landscape state from before the seed gathering. 
-All atmospherically corrected Landsat Collection 2 Level 2 surface reflectance data were pre-processed and downloaded via the Google Earth Engine (GEE) platform (ref Gorelick, 2017). The pre-processing implied selecting scenes with <70\% cloud cover, clipping to region of interest (ROI), cloud masking using quality assessment band and calculating surface reflectance index, NDMI. Normalized Difference Moisture Index (NDMI) (\ref{eq:NDMI}), derived from Landsat's near-infrared and short-wave infrared bands, was used due to its ability to capture gradual changes and regrowth in contrast to NDVI \citep{vermotePreliminaryAnalysisPerformance2016}. 
-Landsat 6 no toperating resulting in less images
-Graph with the number of scenes per year
-Land cover map
+In this research, images from Landsat 5 Thematic Mapper (TM), Landsat 7 Enhanced Thematic Mapper Plus (ETM+) and Landsat 8 Operational Land Imager (OLI) were used to assess the forest age based on the AVOCADO algorithm detecting disturbance and regrowth \citep{decuyperContinuousMonitoringForest2022}. The Landsat archive of the United States Geology Survey was selected due to its long temporal coverage extending back to the early 1970s \citep{kennedyBringingEcologicalView2014, finerCombatingDeforestationSatellite2018}. While Landsat spatial resolution (30~m x 30~m) is sometimes considered a limitation compared to its temporal resolution, it is not a significant constrain in this study, as it is comparable to the spatial extent of the investigated research plots (25~m x 25~m). 
+
+The time series stack ranges from 1992 to 2022, consisting of 719 scenes (WRS path/row: 20–21/49) for the dry tropical forest and 572 scenes (WRS-2 path/row: 22–23/48–49) for the wet tropical forest. The upper limit corresponds to the year before seed collection, as the aim was to assess the landscape conditions preceding seed dispersal.
+
+Figure \ref{fig:satellite} visualized the distribution of available Landsat satellite imagery data across the years of interest and date of a year. We can observe that in the early 2000s, there is a dip in the number of scenes available. This is due to a failed mission of Landsat 6 Enhanced Thematic Mapper which operated 
 
 
 
-These factors will be assessed using the Anomaly Vegetation Change Detection (AVOCADO) algorithm, which is based on the R package "npphen" and with the R package "landscapemetrics" \citep{decuyperContinuousMonitoringForest2022, chavez2017npphen, hesselbarth2019landscapemetrics}. 
+\begin{figure}[H]
+\centering
 
-\textbf{Land cover map}\\
+% Top row
+\includegraphics[width=0.48\linewidth, keepaspectratio]{Report/figures/wf_sd1.pdf}
+\hspace{0.02\linewidth}
+\includegraphics[width=0.48\linewidth, keepaspectratio]{Report/figures/wf_sd2.pdf}
+
+\vspace{1cm} % Space between rows
+
+% Bottom row
+\includegraphics[width=0.48\linewidth, keepaspectratio]{Report/figures/df_sd1.pdf}
+\hspace{0.02\linewidth}
+\includegraphics[width=0.48\linewidth, keepaspectratio]{Report/figures/df_sd2.pdf}
+
+\caption{}
+\label{fig:satellite}
+\end{figure}
 
 
+All atmospherically corrected Landsat Collection 2 Level-2 surface reflectance data were pre-processed and downloaded via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017}. Pre-processing steps included selecting scenes with less than 70\% cloud cover, clipping to the region of interest (ROI), applying cloud masking using the quality assessment band, and calculating the surface reflectance index NDMI. The Normalized Difference Moisture Index (NDMI) (Equation~\ref{eq:NDMI}), derived from Landsat's near-infrared and short-wave infrared bands, was used due to its ability to detect gradual changes and regrowth more effectively than NDVI \citep{vermotePreliminaryAnalysisPerformance2016}.
 
-\subsection{Methods}
-\subsubsection{AVOCADO algorithm}
-AVOCADO is an algorithm designed to detect forest disturbance and regrowth based on satellite imagery in a semi-automated and continuous manner \citep{decuyperContinuousMonitoringForest2022}. It utilizes all available data without requiring outlier removal. AVOCADO uses reference vegetation from a nearby pixel known to have remained undisturbed throughout the time series. This reference pixel will be selected with the help of an expert with a long-term field experience in the area. As a time series algorithm, AVOCADO analyzes more than two satellite images to detect a change. Compared to bi-temporal difference or supervised image classification methods, time series approaches offer greater precision in detecting small-scale forest changes by capturing the dynamic behavior of vegetation over time. This advantage is essential when analyzing forest change dynamics within a smallholder agricultural landscape, such as the one investigated in this research, which is often characterized by complex vegetation dynamics caused by forest degradation and shifting cultivation. Unlike many other traditional time series algorithms, AVOCADO holds an additional benefit in being able to detect more than one disturbance or regrowth. Moreover, time series methods such as temporal segmentation and trend analysis resolve this issue by applying parametric functions. These time series, however, rely on the assumption of a regular phenological cycles. Instead, AVOCADO uses the observed frequency values which enable for a greater flexibility to adapt to site specific conditions and account for natural phenological variability \citep{decuyperContinuousMonitoringForest2022}. Due to these traits, AVOCADO is a suitable algorithm for detection of forest age, cover, and connectivity as it continuously and flexibly monitors vegetation dynamics over time and detects multiple disturbances and regrowth events in complex, smallholder landscapes.
-
-\subsubsection{Satellite imagery}
-The input to the AVOCADO algorithm will be Landsat derived Normalized Difference Moisture Index (NDMI) image. Landsat is selected due to its long historical archive. While Landsat spatial resolution (30m) is sometimes considered a hindrance compared to its temporal resolution, this is not a significant limitation for this study, as the resolution is comparable to the spatial scale of the investigated forest plots (25m). NDMI (\ref{eq:NDMI}), derived from Landsat's near-infrared and short-wave infrared bands, will be used as it is able to capture gradual changes and regrowth in contrast to NDVI \citep{vermotePreliminaryAnalysisPerformance2016}. 
+Satellite data were obtained following the tutorial developed by Decuyper et al. as part of their study on continuous monitoring of forest change dynamics using satellite time series. The tutorial is available online at:
+\href{https://www.pucv.cl/uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado}
 
 \begin{align}
 \label{eq:NDMI}
 NDMI = \frac{\text{NIR} - \text{SWIR}}{\text{NIR} + \text{SWIR}}
 \end{align}
 
-All level-2 terrain-corrected Landsat scenes will be downloaded and pre-processed via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017}. The pre-processing steps will involve the exclusion of images with cloud cover higher than 70\% and clipping of the images by the area of interest. The time series used range from beginning of 1990 to the end of 2022. The exact number of scenes is to be determined. 
+Landsat 6 no toperating resulting in less images
+Graph with the number of scenes per year
 
-% question to still answer:
-%% how to exclude non-forest areas?
-%% how to take into account the recent changes?
+
+
+\textbf{Land cover map}\\
+
+
+
+\subsection{Methods}
+
+\subsubsection{AVOCADO algorithm}
+These factors will be assessed using the Anomaly Vegetation Change Detection (AVOCADO) algorithm, which is based on the R package "npphen" and with the R package "landscapemetrics" \citep{decuyperContinuousMonitoringForest2022, chavez2017npphen, hesselbarth2019landscapemetrics}. 
+
+
+AVOCADO is an algorithm designed to detect forest disturbance and regrowth based on satellite imagery in a semi-automated and continuous manner \citep{decuyperContinuousMonitoringForest2022}. It utilizes all available data without requiring outlier removal. AVOCADO uses reference vegetation from a nearby pixel known to have remained undisturbed throughout the time series. This reference pixel will be selected with the help of an expert with a long-term field experience in the area. As a time series algorithm, AVOCADO analyzes more than two satellite images to detect a change. Compared to bi-temporal difference or supervised image classification methods, time series approaches offer greater precision in detecting small-scale forest changes by capturing the dynamic behavior of vegetation over time. This advantage is essential when analyzing forest change dynamics within a smallholder agricultural landscape, such as the one investigated in this research, which is often characterized by complex vegetation dynamics caused by forest degradation and shifting cultivation. Unlike many other traditional time series algorithms, AVOCADO holds an additional benefit in being able to detect more than one disturbance or regrowth. Moreover, time series methods such as temporal segmentation and trend analysis resolve this issue by applying parametric functions. These time series, however, rely on the assumption of a regular phenological cycles. Instead, AVOCADO uses the observed frequency values which enable for a greater flexibility to adapt to site specific conditions and account for natural phenological variability \citep{decuyperContinuousMonitoringForest2022}. Due to these traits, AVOCADO is a suitable algorithm for detection of forest age, cover, and connectivity as it continuously and flexibly monitors vegetation dynamics over time and detects multiple disturbances and regrowth events in complex, smallholder landscapes.
 
 \subsubsection{Landscapemetrics}
 The output of the AVOCADO algorithm is a raster map with an indication of the year since the last disturbance. This map will be used for a further evaluation of the forest age, forest cover, and forest connectivity using the landscapemetric or the lconnect package in R \citep{mestreLconnectPackageVersatile2023, hesselbarthLandscapemetricsOpensourceTool2019}. Additionally, a land cover map will be used to verify non-forest areas. The output of this section will be a table.
