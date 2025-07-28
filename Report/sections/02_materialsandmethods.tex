@@ -49,18 +49,17 @@ Subsequently, the collected seeds were separated into groups of unique species a
 To  assess the forest surrounding the research plots, the following forest variables were identifined: 1) \textbf{forest age}: the number of years since last regrowth of a forest (up to a maximum of 30 years due the limit of satellite imagery), 2) \textbf{forest cover}: the percentage of forest in the surrounding landscape (ref to landscapemetrics), 3) \textbf{forest connectivity}: the mean of Euclidean nearest neighbor distances between forest patches (def of a forest patch). All forest variables were calculated within a radius of 1000km from the center of a research plot (ref to animal movement, ref to landscapemetrics).  \\
 
 \textbf{Landsat data}\\
-%Why 30 years?
+% Why 30 years?
+% is it a poblem that the research plots are included in the landscape??
 %Remote sensing techniques have become an invaluable tool for assessment of landscape. With historical field data being scarce and interview-based data being unreliable and difficult to obtain, remote sensing techniques offer a robust method for analysis of landscapes with large spatial extents \citep{decuyperContinuousMonitoringForest2022}.
 
 In this research, images from Landsat 5 Thematic Mapper (TM), Landsat 7 Enhanced Thematic Mapper Plus (ETM+) and Landsat 8 Operational Land Imager (OLI) were used to assess the forest age based on the AVOCADO algorithm detecting disturbance and regrowth \citep{decuyperContinuousMonitoringForest2022}. The Landsat archive of the United States Geology Survey was selected due to its long temporal coverage extending back to the early 1970s \citep{kennedyBringingEcologicalView2014, finerCombatingDeforestationSatellite2018}. While Landsat spatial resolution (30~m x 30~m) is sometimes considered a limitation compared to its temporal resolution, it is not a significant constrain in this study, as it is comparable to the spatial extent of the investigated research plots (25~m x 25~m). 
 
-The time series stack ranges from 1992 to 2022, consisting of 719 scenes (WRS path/row: 20–21/49) for the dry tropical forest and 572 scenes (WRS-2 path/row: 22–23/48–49) for the wet tropical forest. The upper limit corresponds to the year before seed collection, as the aim was to assess the landscape conditions preceding seed dispersal.
+The time series stack ranges from 1992 to 2022, consisting of 719 scenes (WRS-2 path/row: 20–21/49) for the dry tropical forest and 572 scenes (WRS-2 path/row: 22–23/48–49) for the wet tropical forest. The upper limit corresponds to the year before seed collection, as the aim was to assess the landscape conditions preceding seed dispersal.
 
-Figure \ref{fig:satellite} visualized the distribution of available Landsat satellite imagery data across the years of interest and date of a year. We can observe that in the early 2000s, there is a dip in the number of scenes available. This is due to a failed mission of Landsat 6 Enhanced Thematic Mapper which operated 
+Figure \ref{fig:satellite} visualizes the distribution of available Landsat satellite imagery data across the years of interest and date of a year for wet and dry forest. We can observe that in the early 2000s, there is a dip in the number of scenes available in both forest types. This is due to a failed mission of Landsat 6 Enhanced Thematic Mapper \citep{gowardHistoricalRecordLandsat2006}.
 
-
-
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 
 % Top row
@@ -75,29 +74,24 @@ Figure \ref{fig:satellite} visualized the distribution of available Landsat sate
 \hspace{0.02\linewidth}
 \includegraphics[width=0.48\linewidth, keepaspectratio]{Report/figures/df_sd2.pdf}
 
-\caption{}
+\caption{\textit{Distribution of Landsat satellite imagery availability across years of interest and date of the year. The upper row shows availability fir the wet forest whereas the lower row shows availability for the dry forest.}}
 \label{fig:satellite}
 \end{figure}
 
 
 All atmospherically corrected Landsat Collection 2 Level-2 surface reflectance data were pre-processed and downloaded via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017}. Pre-processing steps included selecting scenes with less than 70\% cloud cover, clipping to the region of interest (ROI), applying cloud masking using the quality assessment band, and calculating the surface reflectance index NDMI. The Normalized Difference Moisture Index (NDMI) (Equation~\ref{eq:NDMI}), derived from Landsat's near-infrared and short-wave infrared bands, was used due to its ability to detect gradual changes and regrowth more effectively than NDVI \citep{vermotePreliminaryAnalysisPerformance2016}.
 
-Satellite data were obtained following the tutorial developed by Decuyper et al. as part of their study on continuous monitoring of forest change dynamics using satellite time series. The tutorial is available online at:
-\href{https://www.pucv.cl/uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado}
-
 \begin{align}
 \label{eq:NDMI}
 NDMI = \frac{\text{NIR} - \text{SWIR}}{\text{NIR} + \text{SWIR}}
 \end{align}
 
-Landsat 6 no toperating resulting in less images
-Graph with the number of scenes per year
-
-
+Satellite data were obtained following the tutorial developed by Decuyper et al. as part of their study on continuous monitoring of forest change dynamics using satellite time series. The tutorial is available online at:
+\href{https://www.pucv.cl/uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado}\\
 
 \textbf{Land cover map}\\
 
-
+As the aim of this research was to evaluate the forest landscape surrounding the research plots, land cover map was used to mask out all non-forest areas. European Space Agency WorldCover map from 2021 was pre-processed and downloaded via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017}.
 
 \subsection{Methods}
 
