@@ -28,14 +28,21 @@ The extent of the study area is approximately 3~km x 2~km for the dry forest and
 
 \subsubsection{Seed}
 %Seed factor/variable/attribute?
-To assess the seed status in the research plots, the following seed variables were identified: 1) \textbf{seed richness}: number of unique species (?ref), 2) \textbf{seed dispersal mode}: the method (biotic/abiotic) by which a seed is dispersed (?ref)  3) \textbf{seed guild}: the guild (pioneer/shadetolerant/generalist) to which a species belongs based on the characteristics of the species' resource use \citep{blondelGuildsFunctionalGroups2003}. 
+To assess the seed status in the research plots, the following seed variables were identified:
+\begin{itemize}
+    \item \textbf{seed richness}: number of unique species \citep{butlerSpeciesRichnessSpatial1998}, 
+    \item \textbf{seed dispersal mode}: the method (biotic/abiotic) by which a seed is dispersed \citep{dentUnitingNicheDifferentiation2021} and 
+    \item \textbf{seed guild}: the guild (pioneer/shadetolerant/generalist) to which a species belongs based on the characteristics of the species' resource use \citep{blondelGuildsFunctionalGroups2003}. 
+\end{itemize}
+
+The seed dispersal mode was divided into two variables, biotic dispersal and abiotic dispersal, with the proportion of seeds belonging to the corresponding group indicated. Similarly to seed dispersal, seed guilds were divided into three variables, each representing one of the three identified guild types, with an indicatioin of the proportion of seeds belonging to the corresponding group.
 
 To measure the seed variables in both forest sites (wet and dry), four seed traps were established in each plot. In the dry forest, the seed traps were rectangular with the dimensions of 50~cm x 50~cm and in the wet tropical forest, the seed traps were circular with the diameter of 1~m. The seed traps were positioned 6~m from the plots’ edges in each corner of the plots (Fig. \ref{fig:st}). The seeds were collected monthly for a duration of one year in 2023. The content of the four traps was combined into one sample per plot.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth, keepaspectratio]{Report/figures/02_seedtraps.pdf}
-\caption{\textit{Seed traps. Visualization of a seed trap on the left and the placement of seed traps in one research plot on the right. Note that in the wet tropical forest the seed traps are circular.}}
+\caption{\textit{Seed traps. Visualization of a seed trap on the left and the placement of seed traps in one research plot on the right. Note that in the wet tropical forest the seed traps were circular.}}
 \label{fig:st}
 \end{figure}
 
@@ -46,7 +53,19 @@ Subsequently, the collected seeds were separated into groups of unique species a
 %Is it a problem that the research plot itself is not cut out from the landscape evaluation?
 %define research plot (regenerating forest plot?)
 
-To  assess the forest surrounding the research plots, the following forest variables were identifined: 1) \textbf{forest age}: the number of years since last regrowth of a forest (up to a maximum of 30 years due the limit of satellite imagery), 2) \textbf{forest cover}: the percentage of forest in the surrounding landscape \citep{hesselbarth2019landscapemetrics}, 3) \textbf{forest connectivity}: the mean of Euclidean nearest neighbor distances between forest patches (def of a forest patch). All forest variables were calculated within a radius of 1000km from the center of a research plot \citep{hesselbarth2019landscapemetrics} (ref to animal movement, ref to landscapemetrics).  \\
+To  assess the forest surrounding the research plots, the following forest variables were identified:
+\begin{itemize}
+    \item \textbf{forest age}: the number of years since last regrowth of a forest (up to a maximum of 30 years due the limit of satellite imagery),
+    \item \textbf{forest cover}: the percentage of forest in the surrounding landscape \citep{hesselbarthLandscapemetricsOpensourceTool2019}, 
+    \item \textbf{forest connectivity}: the mean of Euclidean nearest neighbor distances between forest patches (Equation \ref{eq:eucledean}). 
+\end{itemize}
+
+The forest patch is defined as one or multiple pixels representing forest adjacent to each other according to queen's case (a whole side has to be attached to a side of another pixel). All forest variables were calculated within a radius of 1000km from the center of a research plot \citep{hesselbarthLandscapemetricsOpensourceTool2019} (ref to animal movement).  \\
+
+\begin{align}
+\label{eq:eucledean}
+ENN_{MN} = \frac{1}{n} \sum_{i=1}^{n} ENN(\text{patch}_{ij})
+\end{align}
 
 \textbf{Landsat data}\\
 % Why 30 years?
