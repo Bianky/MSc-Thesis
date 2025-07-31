@@ -25,9 +25,8 @@ compute_ff <- function(data_folder){
   # if value is not 100, 101, subtract it from 2022 to calculate forest age
   vals[!(vals %in% c(100, 101))] <- 2022 - vals[!(vals %in% c(100, 101))]
   
-  vals[vals < 15 | vals == 15] <- 1
-  vals[vals < 30 & vals > 15] <- 2
-  vals[vals == 101] <- 3 # never deforested area
+  vals[vals < 30 | vals == 30 ] <- 1
+  vals[vals == 101] <- 2 # never deforested area
   vals[vals == 100] <- 0 # non forest areas
   
   values(forest_mosaic) <- vals
@@ -58,8 +57,7 @@ compute_ff <- function(data_folder){
       dplyr::select(-count, -layer) %>%
       pivot_wider(names_from = value, values_from = percent) %>% 
       rename(early = `1`, 
-             late = `2`, 
-             old = `3`)
+             late = `2`)
     
     # add raster name as plot id
     freq_tb$plot_id <- name
@@ -104,7 +102,7 @@ compute_ff <- function(data_folder){
   age_area <- full_join(age, area)
   age_area_perc <- full_join(age_area, age_percentage)
   forest_factors <- full_join(age_area_perc, connectivity) %>% 
-      dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late, old)
+      dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late)
   
   write.csv(forest_factors, file.path(data_folder, "11_forest_factors.csv"))
   

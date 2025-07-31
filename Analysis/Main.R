@@ -1,7 +1,7 @@
 
 packages <- c(
   "googledrive", "tidyverse",  "terra", "npphen", "raster", "RColorBrewer", 
-  "rts", "lubridate", "dplyr", "parallel", "sf", "readxl"
+  "rts", "lubridate", "dplyr", "parallel", "sf", "readxl", "landscapemetrics"
 )
 
 for (pkg in packages) {
