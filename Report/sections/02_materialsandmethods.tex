@@ -24,29 +24,48 @@ There are twenty (25~m x 25~m) research plots established in both the dry and we
 
 The extent of the study area is approximately 3~km x 2~km for the dry forest and 3~km x 5~km for the wet forest, however in order to be able to measure the characteristics of the surrounding landscape a buffer of 1~km was taken around each research plot resulting in an area of approximately 5~km x 5~km for the dry forest and 7~km x 6~km for the wet forest.
 
-\subsection{Data}
+\subsection{Materials}
 
-\subsubsection{Seed}
+\subsubsection{Seed Data}
 %Seed factor/variable/attribute?
-To assess the seed status in the research plots, the following seed variables were identified: 1) \textbf{seed richness}: number of unique species (?ref), 2) \textbf{seed dispersal mode}: the method (biotic/abiotic) by which a seed is dispersed (?ref)  3) \textbf{seed guild}: the guild (pioneer/shadetolerant/generalist) to which a species belongs based on the characteristics of the species' resource use \citep{blondelGuildsFunctionalGroups2003}. 
+To assess the seed status in the research plots, the following seed variables were identified:
+\begin{itemize}
+    \item \textbf{seed richness}: number of unique species \citep{butlerSpeciesRichnessSpatial1998}, 
+    \item \textbf{seed dispersal mode}: the method (biotic/abiotic) by which a seed is dispersed \citep{dentUnitingNicheDifferentiation2021} and 
+    \item \textbf{seed guild}: the guild (pioneer/shadetolerant/generalist) to which a species belongs based on the characteristics of the species' resource use \citep{blondelGuildsFunctionalGroups2003}. 
+\end{itemize}
+
+The seed dispersal mode was divided into two variables, biotic dispersal and abiotic dispersal, with the proportion of seeds belonging to the corresponding group indicated. Similarly to seed dispersal, seed guilds were divided into three variables, each representing one of the three identified guild types, with an indicatioin of the proportion of seeds belonging to the corresponding group.
 
 To measure the seed variables in both forest sites (wet and dry), four seed traps were established in each plot. In the dry forest, the seed traps were rectangular with the dimensions of 50~cm x 50~cm and in the wet tropical forest, the seed traps were circular with the diameter of 1~m. The seed traps were positioned 6~m from the plots’ edges in each corner of the plots (Fig. \ref{fig:st}). The seeds were collected monthly for a duration of one year in 2023. The content of the four traps was combined into one sample per plot.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth, keepaspectratio]{Report/figures/02_seedtraps.pdf}
-\caption{\textit{Seed traps. Visualization of a seed trap on the left and the placement of seed traps in one research plot on the right. Note that in the wet tropical forest the seed traps are circular.}}
+\includegraphics[width=\linewidth, keepaspectratio]{Report/figures/25m.pdf}
+\caption{\textit{Seed traps. Visualization of a seed trap on the left and the placement of seed traps in one research plot on the right. Note that in the wet tropical forest the seed traps were circular.}}
 \label{fig:st}
 \end{figure}
 
 Subsequently, the collected seeds were separated into groups of unique species and identified per species. Based on literature, each species was described by their dispersal mode (biotic/abiotic) and guild (pioneer/shadetolerant/generalist). The seperation and identification of seed species was performed with a seed catalog provided by Universidad Nacional Autonóma de México (UNAM) and with the support of research assistant Marina Beatriz Hernandez Mendez, an expert in tropical wet forest seed identification, and Gerardo Luis Cervantes Jiménez, an expert in tropical dry forest seed identification. 
 
 
-\subsubsection{Landscape}
+\subsubsection{Landscape Data}
 %Is it a problem that the research plot itself is not cut out from the landscape evaluation?
 %define research plot (regenerating forest plot?)
 
-To  assess the forest surrounding the research plots, the following forest variables were identifined: 1) \textbf{forest age}: the number of years since last regrowth of a forest (up to a maximum of 30 years due the limit of satellite imagery), 2) \textbf{forest cover}: the percentage of forest in the surrounding landscape \citep{hesselbarth2019landscapemetrics}, 3) \textbf{forest connectivity}: the mean of Euclidean nearest neighbor distances between forest patches (def of a forest patch). All forest variables were calculated within a radius of 1000km from the center of a research plot \citep{hesselbarth2019landscapemetrics} (ref to animal movement, ref to landscapemetrics).  \\
+To  assess the forest landscape surrounding the research plots, the following forest variables were identified:
+\begin{itemize}
+    \item \textbf{forest age}: the number of years since the last regrowth of a forest (up to a maximum of 30 years due the limit of satellite imagery),
+    \item \textbf{forest cover}: the percentage of forest in the surrounding landscape \citep{hesselbarthLandscapemetricsOpensourceTool2019}, 
+    \item \textbf{forest connectivity}: the mean of Euclidean nearest neighbor distances between forest patches (Equation \ref{eq:eucledean}). 
+\end{itemize}
+
+The forest patch is defined as one or multiple pixels representing forest adjacent to each other according to queen's case (a whole side has to be attached to a side of another pixel). All forest variables were calculated within a radius of 1000~m from the center of a research plot as this is the upper limit of tropical plant species dispersal \citep{corlettSeedDispersalDistances2009}. Additionally, forest cover and forest connectivity were calculated using the \textit{landscapemetrics} R package \citep{hesselbarthLandscapemetricsOpensourceTool2019}.  \\
+
+\begin{align}
+\label{eq:eucledean}
+ENN_{MN} = \frac{1}{n} \sum_{i=1}^{n} ENN(\text{patch}_{ij})
+\end{align}
 
 \textbf{Landsat data}\\
 % Why 30 years?
@@ -86,12 +105,14 @@ All atmospherically corrected Landsat Collection 2 Level-2 surface reflectance d
 NDMI = \frac{\text{NIR} - \text{SWIR}}{\text{NIR} + \text{SWIR}}
 \end{align}
 
-Satellite data were obtained following the tutorial developed by Decuyper et al. as part of their study on continuous monitoring of forest change dynamics using satellite time series. The tutorial is available online at:
-\href{https://www.pucv.cl/uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado}\\
+Satellite data were obtained following the tutorial developed by Decuyper et al. as part of their study on Continuous monitoring of forest change dynamics using satellite time series. The tutorial is available online at: \hyperref[pucv.cl]{https://www.pucv.cl/uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado}.\\
 
 \textbf{Land cover map}\\
 
 As the aim of this research was to evaluate the forest landscape surrounding the research plots, land cover map was used to mask out all non-forest areas. European Space Agency WorldCover map from 2021 was pre-processed and downloaded via the Google Earth Engine (GEE) platform \citep{gorelickGoogleEarthEngine2017, zanagaESAWorldCover102022}. The pre-processing steps included clipping the land cover map to the region of interest (ROI) and rescaling the resolution to 30~m x 30~m to align with the satellite imagery data. 
+
+\subsubsection{Software}
+This research was conducted in R language using the Rstudio interface \citep{}
 
 \subsection{Methods}
 
