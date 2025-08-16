@@ -1,0 +1,143 @@
+/*
+*------------------------------------------------------------------------*
+** @date 2025-05-01
+** @title Process and download Landsat data collection 2 Level 2
+** @description The script processes and downloads the Landsat Collection 2 Level 2 for the purpose of MSc-thesis.  
+** This has been done following the AVOCADO package tutorial for continuous monitoring of forest
+** change dynamics with satellite time series(Decuyper et al., 2022).
+** @tutorial_url /uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado
+*------------------------------------------------------------------------*
+*/
+
+// Variable definition
+////////////////////////////////////////////////////////////////////////////////////
+
+var input_polygon = 'projects/msc-thesis-458312/assets/AOI_wf';
+
+var input_export_folder = 'landsat_92-22_wf';
+
+// Start and end dates
+var input_StartStr = ee.String('1992-01-01');
+var input_FinishStr = ee.String('2022-12-31');
+
+var ndmi_ind = ['TRUE'];
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Buffer to download around the above area, use 0 for no buffer
+var input_buffer = 0;
+
+// Convert text string dates to date tpe
+var Start = ee.Date(input_StartStr);
+var Finish = ee.Date(input_FinishStr);
+
+// Create a feature collection out of the fustion table id
+var Polygon = ee.FeatureCollection(ee.String(input_polygon));
+
+// Buffer the area of interest
+var PolygonBuffer = input_buffer === 0 ? Polygon.first().geometry() : Polygon.first().geometry().buffer(input_buffer);
+
+// Add stuff on the map
+Map.addLayer(PolygonBuffer,null,'Buffer');
+Map.centerObject(PolygonBuffer);
+
+// Standard names to rename the bands regardless of collection
+var selected_bands = ['blue','green','red','nir','swir','swir2','QA_PIXEL'];
+
+// Applies scaling factors to optical bands.
+var applyScaleFactors = function (image) {
+var opticalBands = image.select('SR_.*').multiply(0.0000275).add(-0.2);
+return image.addBands(opticalBands, null, true);
+};
+
+// Merge the 3 collections, select, and rename the bands to standard names
+
+var Collection = ee.ImageCollection('LANDSAT/LT05/C02/T1_L2').map(applyScaleFactors).select(['SR_B1','SR_B2','SR_B3','SR_B4','SR_B5','SR_B7','QA_PIXEL'],selected_bands)
+.merge(ee.ImageCollection('LANDSAT/LE07/C02/T1_L2').map(applyScaleFactors).select(['SR_B1','SR_B2','SR_B3','SR_B4','SR_B5','SR_B7','QA_PIXEL'],selected_bands))
+.merge(ee.ImageCollection('LANDSAT/LC08/C02/T1_L2').map(applyScaleFactors).select(['SR_B2','SR_B3','SR_B4','SR_B5','SR_B6','SR_B7','QA_PIXEL'],selected_bands))
+.sort("system:time_start") // Sort by Date
+.filterDate(Start,Finish) // Filter by date
+.filterBounds(PolygonBuffer) // Filter by area
+.filterMetadata("CLOUD_COVER","less_than",70) // Filter by cloud cover
+.map(function(image) {return image.mask(image.select('QA_PIXEL') // apply cleaning with QA band
+.remap([1,5440,21824],[1,1,1],0) // 1...21824 -> 1 = not masked
+);
+
+}
+);
+
+print('Collection of Landsat Scenes',Collection);
+
+// Mosaicking by day
+// Create list with dates
+var Days = Finish.difference(Start, 'day');
+var Dates = ee.List.sequence(0, Days.subtract(1)).map(function(Day){return Start.advance(Day,'day')});
+
+// Function that does day mosaicking
+var day_mosaicking = function day_mosaicking(date, newlist) {
+// Cast
+date = ee.Date(date);
+newlist = ee.List(newlist);
+
+// Filter collection between date and the next day
+var filtered = Collection.filterDate(date, date.advance(1,'day'));
+var first = filtered.first();
+
+// Make the mosaic
+var image = ee.Image(filtered.mosaic());
+image = image.set('system:time_start',date.millis());
+image = image.set('SATELLITE',first.get('SATELLITE'));
+// Add the mosaic to a list only if the collection has images
+return ee.List(ee.Algorithms.If(filtered.size(), newlist.add(image), newlist));
+};
+
+// Iterate through dates and create a collection with mosaicked images
+Collection = ee.ImageCollection(ee.List(Dates.iterate(day_mosaicking, ee.List([]))));
+
+// Calculate the normalized difference index (ndi), give it a name and merge all single band images
+var mergeBands = function mergeBands(image, previous) {
+return ee.Image(previous).addBands(image);
+};
+
+
+// NDMI calculation
+if (ndmi_ind == 'TRUE'){
+
+var input_index = "NDMI";
+var index_bands = ['nir','swir'];
+var NDMI = Collection
+.map(function(image) {return image.normalizedDifference(index_bands)
+.rename(ee.String(input_index+'_').cat(ee.Date(image.get('system:time_start')).format('YYYYMMdd')));
+})
+.iterate(mergeBands, ee.Image([]));
+
+var NDMI = ee.Image(NDMI).multiply(ee.Image(10000))
+.round()
+.toFloat()
+.clip(PolygonBuffer);
+
+// (iv) extracting the band layer names for dates to export a table of the dates
+var asList = NDMI.bandNames().map(function (layer) {
+return ee.Feature(null, {Date: ee.String(layer)});
+});
+
+var feature_date = ee.FeatureCollection(asList);
+
+Export.image.toDrive({
+image:NDMI,
+description: 'Landsat_' + input_index + '_' + input_StartStr.getInfo() + '_' + input_FinishStr.getInfo(),
+folder: input_export_folder,
+region: PolygonBuffer,
+scale: 30,
+maxPixels: 10e10
+});
+
+
+Export.table.toDrive({
+collection:feature_date,
+description: 'Date_Landsat_' + input_index + '_' + input_StartStr.getInfo() + '_' + input_FinishStr.getInfo(),
+folder: input_export_folder
+});
+}
+
