@@ -1,0 +1,580 @@
+
+# DATA LOADING ------------------------------------------------------------------
+
+# seed factors
+seed_factors_wf <- read.csv("../../../04_data/seed/wf/11_seed_factors.csv")
+seed_factors_df <- read.csv("../../../04_data/seed/df/11_seed_factors.csv")
+
+seed_factors_all <- full_join(seed_factors_df, seed_factors_wf) %>% 
+  dplyr::select(-X)
+
+# forest factors
+forest_factors_wf <- read.csv("../../../04_data/forest/wf/11_forest_factors.csv")
+forest_factors_df <- read.csv("../../../04_data/forest/df/11_forest_factors.csv")
+
+forest_factors_all <- full_join(forest_factors_df, forest_factors_wf) %>% 
+  dplyr::select(-X)
+
+# all factors
+all_factors <- full_join(seed_factors_all, forest_factors_all) %>% 
+  filter(!(ID == "MX_DR_FC6")) 
+
+
+# DATA PREPARATION -------------------------------------------------------------
+
+data <- all_factors %>% 
+  dplyr::select(richness, dispersal_biotic, dispersal_abiotic, guild_shadetolerant, guild_pioneer, guild_generalist, forest_cover, forest_connectivity, forest_early_ss, forest_late_ss, forest_type)
+
+# predictor variables
+data$forest_cover        <- as.numeric(scale(data$forest_cover))
+data$forest_early_ss     <- as.numeric(scale(data$forest_early_ss))
+data$forest_late_ss      <- as.numeric(scale(data$forest_late_ss))
+data$forest_connectivity <- as.numeric(scale(data$forest_connectivity))
+data$forest_type         <- as.factor(data$forest_type)
+
+
+# MODELS -----------------------------------------------------------------------
+
+
+  ### Richness ----------------------------------------------------------------- 
+
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(richness ~ forest_cover + forest_connectivity + forest_type, data = data)
+  summary(model1)
+
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("richness ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: forest early succession stage + forest connectivity + forest type
+  model2 <- lm(richness ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("richness ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: forest late succession stage + forest connectivity + forest type
+  model3 <- lm(richness ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("richness ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+
+  
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for richness",
+            dep.var.labels = "Richness",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+
+  # predicted effects plots
+  # List of models and predictors
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  names <- c(forest_cover = "forest cover",
+             forest_connectivity = "forest connectivity",
+             forest_early_ss = "forest early successional stage",
+             forest_late_ss = "forest late successional stage",
+             forest_type = "forest type")
+  
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+
+
+
+  ### Biotic dispersal ---------------------------------------------------------
+
+  # transformaiton of biotic dispersal to improve the model's fit
+  data$dispersal_biotic <- sqrt(data$dispersal_biotic)
+  
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(dispersal_biotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("biotic dispersal ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: early + forest connectivity + forest type
+  model2 <- lm(dispersal_biotic ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("biotic dispersal ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: forest late successional stage + forest connectivity + forest type
+  model3 <- lm(dispersal_biotic ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("biotic dispersal ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for biotic dispersal",
+            dep.var.labels = "Biotic dispersal",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+  
+  
+  
+  # predicted effects plots
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        ylab("Biotic dispersal") +
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+
+
+  
+  ### Abiotic dispersal --------------------------------------------------------
+  
+  # transformation of abiotic dispersal to improve the model's fit
+  data$dispersal_abiotic <- (data$dispersal_abiotic)^2
+  
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(dispersal_abiotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("abiotic dispersal ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: forest earlu successional stage + forest connectivity + forest type
+  model2 <- lm(dispersal_abiotic ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("abiotic dispersal ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: forest late successional stage + forest connectivity + forest type
+  model3 <- lm(dispersal_abiotic ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("abiotic dispersal ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for abiotic dispersal",
+            dep.var.labels = "Abiotic dispersal",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+  
+  
+  # predicted effects plots
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        ylab("Abiotic dispersal") +
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+  
+  
+  ### Generalist guild ---------------------------------------------------------
+
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(guild_generalist ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("generalist guild ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: forest early successional stage + forest connectivity + forest type
+  model2 <- lm(guild_generalist ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("generalist guild ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: forest late successional stage + forest connectivity + forest type
+  model3 <- lm(guild_generalist ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("generalist guild ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for generalist guild",
+            dep.var.labels = "Generalist guild",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+  
+  
+  # predicted effects plots
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        ylab("Generalist guild") +
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+  
+  
+  ### Shadetolerant guild ------------------------------------------------------
+
+  # transformation of shadetolerant guild to improve the model's fit
+  n <- nrow(data)
+  data$guild_shadetolerant <- (data$guild_shadetolerant * (n - 1) + 0.5) / n
+  data$guild_shadetolerant <- data$guild_shadetolerant^(1/3) 
+
+  # zero inflated model
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(guild_shadetolerant ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("shadetolerant guild ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: early + forest connectivity + forest type
+  model2 <- betareg(guild_shadetolerant ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("shadetolerant guild ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: late + forest connectivity + forest type
+  model3 <- betareg(guild_shadetolerant ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("shadetolerant guild ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for shadetolerant guild",
+            dep.var.labels = "Shadetolerant guild",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+  
+
+  
+  # predicted effects plots
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        ylab("Shadetolerant guild") +
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+  
+
+  
+  ### Pioneer guild ------------------------------------------------------------
+
+  # transformation of pioneer guild to improve the model's fit
+  data$guild_pioneer <- log(data$guild_pioneer + 1) 
+  
+  # model 1: forest cover + forest connectivity + forest type
+  model1 <- lm(guild_pioneer ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  
+  # residual diagnostics plot model 1
+  par(mfrow = c(2, 2))
+  plot(model1)
+  mtext("pioneer guild ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 2: forest early successional stage + forest connectivity + forest type
+  model2 <- lm(guild_pioneer ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  # residual diagnostics plot model 2
+  par(mfrow = c(2, 2))
+  plot(model2)
+  mtext("pioneer guild ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # model 3: forest late successional stage + forest connectivity + forest type
+  model3 <- lm(guild_pioneer ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  summary(model3)
+  
+  # residual diagnostics plot model 3
+  par(mfrow = c(2, 2))
+  plot(model3)
+  mtext("pioneer ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  
+  # table of coefficients
+  stargazer(model1, model2, model3, 
+            type = "latex",   # change to "latex" or "html" for papers
+            title = "Regression results for pioneer guild",
+            dep.var.labels = "Pioneer guild",
+            covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
+            digits = 3)
+  
+
+  
+  # predicted effects plots
+  models <- list(model1 = model1, model2 = model2, model3 = model3)
+  predictors <- list(
+    model1 = c("forest_cover", "forest_connectivity", "forest_type"),
+    model2 = c("forest_early_ss", "forest_connectivity", "forest_type"),
+    model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
+  )
+  
+  # generate plots
+  plots <- lapply(names(models), function(mod_name){
+    model <- models[[mod_name]]
+    preds <- predictors[[mod_name]]
+    
+    # generate ggpredict plots for each predictor
+    pred_plots <- lapply(preds, function(p){
+      ggpredict(model, terms = p) %>% plot() + 
+        ggtitle("") +
+        xlab(names[p]) + 
+        ylab("Pioneer guild") +
+        theme_minimal()
+    })
+    pred_plots
+  })
+  
+  # flatten the list
+  plots_flat <- unlist(plots, recursive = FALSE)
+  
+  # combine all plots in a grid
+  wrap_plots(plots_flat, ncol = 3)
+  
+
+#  PEARSON CORRELATION ---------------------------------------------------------
+  
+  df <- all_factors %>% rename("forest early successional stage (%)" = "forest_early_ss",
+                               "forest late successional stage (%)" = "forest_late_ss",
+                               "forest cover (%)" = "forest_cover",
+                               "forest connectivity" = "forest_connectivity",
+                               "richness" = "richness",
+                               "abiotic dispersal (%)" = "dispersal_abiotic",
+                               "biotic dispersal (%)" = "dispersal_biotic",
+                               "generalist (%)" = "guild_generalist",
+                               "pioneer (%)" = "guild_pioneer",
+                               "shadetolerant (%)" = "guild_shadetolerant") 
+  
+  df <- df %>% dplyr::select("forest early successional stage (%)",
+                             "forest late successional stage (%)",
+                             "forest cover (%)",
+                             "forest connectivity",
+                             "richness",
+                             "abiotic dispersal (%)",
+                             "biotic dispersal (%)",
+                             "generalist (%)",
+                             "pioneer (%)",
+                             "shadetolerant (%)",
+                             "forest_type")
+  
+  exp <- c( "forest early successional stage (%)",
+            "forest late successional stage (%)",
+            "forest cover (%)",
+            "forest connectivity")
+  
+  res <- c("richness",
+           "abiotic dispersal (%)",
+           "biotic dispersal (%)",
+           "generalist (%)",
+           "pioneer (%)",
+           "shadetolerant (%)")
+  
+  
+  wet_data <- df %>% filter(forest_type == "wet")
+  dry_data <- df %>% filter(forest_type == "dry")
+  
+  # correlation matrix for all numeric variables within wet/dry
+  my_order <- c("forest early successional stage (%)",
+                "forest late successional stage (%)",
+                "forest cover (%)",
+                "forest connectivity",
+                "richness",
+                "biotic dispersal (%)",
+                "abiotic dispersal (%)",
+                "generalist (%)",
+                "pioneer (%)",
+                "shadetolerant (%)")
+  
+  
+  get_cor_long_all <- function(df, forest_label, order_vars) {
+    num_df <- df %>% dplyr::select(where(is.numeric))
+    cor_mat <- cor(num_df, use = "pairwise.complete.obs")
+    
+    cor_long <- as.data.frame(as.table(cor_mat))
+    colnames(cor_long) <- c("Var1", "Var2", "Correlation")
+    
+    # apply ordering
+    cor_long$Var1 <- factor(cor_long$Var1, levels = order_vars)
+    cor_long$Var2 <- factor(cor_long$Var2, levels = order_vars)
+    
+    cor_long$forest_type <- forest_label
+    return(cor_long)
+  }
+  
+  # apply to wet and dry
+  cor_wet_all <- get_cor_long_all(wet_data, "wet", my_order)
+  cor_dry_all <- get_cor_long_all(dry_data, "dry", my_order)
+  
+  cor_both_all <- bind_rows(cor_wet_all, cor_dry_all)
+  
+  # plot heatmap
+  ggplot(cor_both_all, aes(x = Var2, y = Var1, fill = Correlation)) +
+    geom_tile(color = "white") +
+    geom_text(aes(label = round(Correlation, 2)), color = "black", size = 3) +
+    scale_fill_gradient2(low = "#F4E7C5", mid = "white", high = "#CD5733", midpoint = 0) +
+    facet_wrap(~ forest_type) +
+    theme_minimal() +
+    labs(
+      title = "Correlation matrix",
+      fill = "Pearson r"
+    ) +
+    xlab("") +
+    ylab("") +
+    # color the axis labels
+    scale_x_discrete(labels = setNames(
+      paste0(my_order), my_order
+    )) +
+    scale_y_discrete(labels = setNames(
+      paste0(my_order), my_order
+    )) +
+    theme(
+      axis.text.x = element_text(color = ifelse(my_order %in% exp, "black", "brown4"), angle = 45, hjust = 1, vjust = 1),
+      axis.text.y = element_text(color = ifelse(my_order %in% exp, "black", "brown4"))
+    )
+  
+  

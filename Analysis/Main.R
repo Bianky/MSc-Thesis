@@ -1,7 +1,8 @@
 
 packages <- c(
   "googledrive", "tidyverse",  "terra", "npphen", "raster", "RColorBrewer", 
-  "rts", "lubridate", "dplyr", "parallel", "sf", "readxl", "landscapemetrics"
+  "rts", "lubridate", "dplyr", "parallel", "sf", "readxl", "landscapemetrics", 
+  "car", "stargazer", "ggeffects", "patchwork", "betareg"
 )
 
 for (pkg in packages) {
@@ -20,26 +21,29 @@ wet_forest <- "../../../04_data/forest/wf/"
 dry_forest_seed <- "../../../04_data/seed/df/"
 wet_forest_seed <- "../../../04_data/seed/wf/"
 
-# 01_SatelliteDataRetireval.R
+# authenticate and download NDMI Landsat data from Google drive
 drive_auth()
 retrieve_sd("landsat_92-22_df", file.path(dry_forest, "05_satellite"))
 retrieve_sd("landsat_92-22_wf", file.path(wet_forest, "05_satellite"))
 
-# 02b_AVOCADO.R
+# Run avocado algorithm
 # due to high computational power last part can only be run on a remote server = commented out
 avocado(dry_forest)
 avocado(wet_forest)
 
-# 03_ForestMosaicComputation
+# Compute forest mosaic
 forest_mosaic(dry_forest)
 forest_mosaic(wet_forest)
 
-# 04_ForestFactorsComputation
+# Calculate forest variables
 compute_ff(dry_forest)
 compute_ff(wet_forest)
 
-# 04_SeedFactorsComputation
+# Calculate seed variables
 compute_sf(dry_forest_seed)
 compute_sf(wet_forest_seed)
+
+# run the statistics script
+source("C:/Users/Bianka/Documents/MSc-Thesis/Analysis/statistics.R")
 
 

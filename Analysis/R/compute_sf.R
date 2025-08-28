@@ -46,5 +46,5 @@ compute_sf <- function(data_folder){
   seed_factors <- full_join(richness, dispersal)
   seed_factors <- full_join(seed_factors, guild)
 
-  write.csv(seed_factors, file.path(data_folder, "seed_factors.csv"))
+  write.csv(seed_factors, file.path(data_folder, "11_seed_factors.csv"))
 }

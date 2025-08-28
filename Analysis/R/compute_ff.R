@@ -102,7 +102,15 @@ compute_ff <- function(data_folder){
   age_area <- full_join(age, area)
   age_area_perc <- full_join(age_area, age_percentage)
   forest_factors <- full_join(age_area_perc, connectivity) %>% 
-      dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late)
+    dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late) %>% 
+    rename(ID = plot_id, 
+           forest_cover = pland,
+           forest_connectivity = enn_mn_inv,
+           forest_early_ss = early,
+           forest_late_ss = late
+           ) %>% 
+    mutate(forest_type = ifelse(grepl("DR", ID), "dry", "wet"))
+    
   
   write.csv(forest_factors, file.path(data_folder, "11_forest_factors.csv"))
   
