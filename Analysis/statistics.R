@@ -74,8 +74,7 @@ data$forest_type         <- as.factor(data$forest_type)
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
             digits = 3)
 
-  # predicted effects plots
-  # List of models and predictors
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -83,32 +82,34 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  names <- c(forest_cover = "forest cover",
-             forest_connectivity = "forest connectivity",
-             forest_early_ss = "forest early successional stage",
-             forest_late_ss = "forest late successional stage",
-             forest_type = "forest type")
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
   
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "richness"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("richness") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
-  
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
 
 
 
@@ -152,9 +153,7 @@ data$forest_type         <- as.factor(data$forest_type)
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
             digits = 3)
   
-  
-  
-  # predicted effects plots
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -162,27 +161,35 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
-        ylab("Biotic dispersal") +
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
+  
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "dispersal_biotic"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("biotic dispersal") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
   
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
 
 
   
@@ -227,7 +234,7 @@ data$forest_type         <- as.factor(data$forest_type)
             digits = 3)
   
   
-  # predicted effects plots
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -235,27 +242,34 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
-        ylab("Abiotic dispersal") +
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
+  
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "dispersal_abiotic"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("abiotic dispersal") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
-  
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
   
   
   ### Generalist guild ---------------------------------------------------------
@@ -296,7 +310,7 @@ data$forest_type         <- as.factor(data$forest_type)
             digits = 3)
   
   
-  # predicted effects plots
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -304,27 +318,34 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
-        ylab("Generalist guild") +
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
+  
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "guild_generalist"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("generalist guild") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
-  
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
   
   
   ### Shadetolerant guild ------------------------------------------------------
@@ -336,7 +357,7 @@ data$forest_type         <- as.factor(data$forest_type)
 
   # zero inflated model
   # model 1: forest cover + forest connectivity + forest type
-  model1 <- lm(guild_shadetolerant ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  model1 <- betareg(guild_shadetolerant ~ forest_cover + forest_connectivity +  forest_type, data = data)
   summary(model1)
   
   # residual diagnostics plot model 1
@@ -372,7 +393,7 @@ data$forest_type         <- as.factor(data$forest_type)
   
 
   
-  # predicted effects plots
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -380,27 +401,34 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
-        ylab("Shadetolerant guild") +
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
+  
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "guild_shadetolerant"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("shadetolerant guild") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
-  
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
   
 
   
@@ -446,7 +474,7 @@ data$forest_type         <- as.factor(data$forest_type)
   
 
   
-  # predicted effects plots
+  # Models and their predictors
   models <- list(model1 = model1, model2 = model2, model3 = model3)
   predictors <- list(
     model1 = c("forest_cover", "forest_connectivity", "forest_type"),
@@ -454,27 +482,34 @@ data$forest_type         <- as.factor(data$forest_type)
     model3 = c("forest_late_ss", "forest_connectivity", "forest_type")
   )
   
-  # generate plots
-  plots <- lapply(names(models), function(mod_name){
-    model <- models[[mod_name]]
-    preds <- predictors[[mod_name]]
-    
-    # generate ggpredict plots for each predictor
-    pred_plots <- lapply(preds, function(p){
-      ggpredict(model, terms = p) %>% plot() + 
-        ggtitle("") +
-        xlab(names[p]) + 
-        ylab("Pioneer guild") +
+  # Original dataset for points (replace 'data1', 'data2', 'data3' with your datasets)
+  data_list <- list(model1 = data, model2 = data, model3 = data)
+  
+  # Define nicer x-axis labels
+  x_labels <- c(
+    forest_cover       = "forest cover (%)",
+    forest_connectivity = "forest connectivity",
+    forest_type        = "forest type",
+    forest_early_ss    = "forest early successional stage (%)",
+    forest_late_ss     = "forest late successional stage (%)"
+  )
+  
+  # Generate plots with raw data points and custom x-axis labels
+  plots <- lapply(names(models), function(m) {
+    lapply(predictors[[m]], function(p) {
+      pred <- ggpredict(models[[m]], terms = p)
+      ggplot(pred, aes(x = x, y = predicted)) +
+        geom_line(color = "#CD5733", size = 1) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2, fill = "#DCCB95") +
+        geom_point(data = data_list[[m]], aes_string(x = p, y = "guild_pioneer"), alpha = 0.5) +
+        xlab(x_labels[p]) +  # use the custom label
+        ylab("pioneer guild") +
         theme_minimal()
     })
-    pred_plots
-  })
+  }) |> unlist(recursive = FALSE)
   
-  # flatten the list
-  plots_flat <- unlist(plots, recursive = FALSE)
-  
-  # combine all plots in a grid
-  wrap_plots(plots_flat, ncol = 3)
+  # Combine plots in a grid
+  wrap_plots(plots, ncol = 3)
   
 
 #  PEARSON CORRELATION ---------------------------------------------------------
@@ -556,7 +591,7 @@ data$forest_type         <- as.factor(data$forest_type)
   ggplot(cor_both_all, aes(x = Var2, y = Var1, fill = Correlation)) +
     geom_tile(color = "white") +
     geom_text(aes(label = round(Correlation, 2)), color = "black", size = 3) +
-    scale_fill_gradient2(low = "#F4E7C5", mid = "white", high = "#CD5733", midpoint = 0) +
+    scale_fill_gradient2(low = "#DCCB95", mid = "white", high = "#CD5733", midpoint = 0) +
     facet_wrap(~ forest_type) +
     theme_minimal() +
     labs(
