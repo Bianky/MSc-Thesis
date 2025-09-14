@@ -68,7 +68,7 @@ data$forest_type         <- as.factor(data$forest_type)
   
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for richness",
             dep.var.labels = "Richness",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
@@ -112,6 +112,22 @@ data$forest_type         <- as.factor(data$forest_type)
   wrap_plots(plots, ncol = 3)
 
 
+  # Extract prediction for early successional cover from model2
+  pred_early <- ggpredict(model2, terms = "forest_early_ss")
+  
+  # Plot with raw points and confidence ribbon
+  r <- ggplot(pred_early, aes(x = x, y = predicted)) +
+    geom_line(color = "#CD5733", size = 1) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+                alpha = 0.3, fill = "#E9E2CC") +
+    geom_point(data = data,
+               aes(x = forest_early_ss, y = richness, color = forest_type),
+               alpha = 0.5) +
+    scale_color_manual(values = c("wet" = "#869144", "dry" = "#FED789")) +
+    xlab("forest early successional stage (%)") +
+    ylab("species richness") +
+    theme_minimal() +
+    theme(legend.position = "none") 
 
   ### Biotic dispersal ---------------------------------------------------------
 
@@ -147,7 +163,7 @@ data$forest_type         <- as.factor(data$forest_type)
   
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for biotic dispersal",
             dep.var.labels = "Biotic dispersal",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
@@ -227,7 +243,7 @@ data$forest_type         <- as.factor(data$forest_type)
   
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for abiotic dispersal",
             dep.var.labels = "Abiotic dispersal",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
@@ -303,7 +319,7 @@ data$forest_type         <- as.factor(data$forest_type)
 
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for generalist guild",
             dep.var.labels = "Generalist guild",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
@@ -385,7 +401,7 @@ data$forest_type         <- as.factor(data$forest_type)
 
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for shadetolerant guild",
             dep.var.labels = "Shadetolerant guild",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),
@@ -459,14 +475,14 @@ data$forest_type         <- as.factor(data$forest_type)
   model3 <- lm(guild_pioneer ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
   summary(model3)
   
-  # residual diagnostics plot model 3
+  y# residual diagnostics plot model 3
   par(mfrow = c(2, 2))
   plot(model3)
   mtext("pioneer ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
   
   # table of coefficients
   stargazer(model1, model2, model3, 
-            type = "latex",   # change to "latex" or "html" for papers
+            type = "text",   # change to "latex" or "html" for papers
             title = "Regression results for pioneer guild",
             dep.var.labels = "Pioneer guild",
             covariate.labels = c("Forest cover", "Forest early successional stage", "Forest late successional stage", "Forest connectivity", "Forest type (wet)"),

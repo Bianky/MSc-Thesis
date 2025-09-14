@@ -85,13 +85,13 @@ compute_ff <- function(data_folder){
   values(forest_mosaic) <- vals
   
   # calculate forest area
-  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
+  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1600, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(pland = pland/100)
   
   # calculate forest connectivity
-  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
+  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1600, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(enn_mn = replace_na(enn_mn, 0), 
@@ -101,7 +101,7 @@ compute_ff <- function(data_folder){
   # merge all variables together
   age_area <- full_join(age, area)
   age_area_perc <- full_join(age_area, age_percentage)
-  forest_factors <- full_join(age_area_perc, connectivity) %>% 
+  forest_factors <- full_join(age_area_perc, connectivity) %>%
     dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late) %>% 
     rename(ID = plot_id, 
            forest_cover = pland,
