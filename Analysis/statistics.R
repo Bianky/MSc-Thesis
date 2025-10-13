@@ -2,15 +2,15 @@
 # DATA LOADING ------------------------------------------------------------------
 
 # seed factors
-seed_factors_wf <- read.csv("../../../04_data/seed/wf/11_seed_factors.csv")
-seed_factors_df <- read.csv("../../../04_data/seed/df/11_seed_factors.csv")
+seed_factors_wf <- read.csv("data/seed/wf/11_seed_factors.csv")
+seed_factors_df <- read.csv("data/seed/df/11_seed_factors.csv")
 
 seed_factors_all <- full_join(seed_factors_df, seed_factors_wf) %>% 
   dplyr::select(-X)
 
 # forest factors
-forest_factors_wf <- read.csv("../../../04_data/forest/wf/11_forest_factors.csv")
-forest_factors_df <- read.csv("../../../04_data/forest/df/11_forest_factors.csv")
+forest_factors_wf <- read.csv("data/forest/wf/11_forest_factors.csv")
+forest_factors_df <- read.csv("data/forest/df/11_forest_factors.csv")
 
 forest_factors_all <- full_join(forest_factors_df, forest_factors_wf) %>% 
   dplyr::select(-X)
