@@ -12,14 +12,14 @@ for (pkg in packages) {
   library(pkg, character.only = TRUE)
 }
 
-funs <- list.files("C:/Users/Bianka/Documents/MSc-Thesis/Analysis/R/", pattern = "\\.R$", full.names = TRUE)
+funs <- list.files("MSc-Thesis/Analysis/R/", pattern = "\\.R$", full.names = TRUE)
 lapply(funs, source)
 
-dry_forest <- "../../../04_data/forest/df/"
-wet_forest <- "../../../04_data/forest/wf/"
+dry_forest <- "data/forest/df/"
+wet_forest <- "data/forest/wf/"
 
-dry_forest_seed <- "../../../04_data/seed/df/"
-wet_forest_seed <- "../../../04_data/seed/wf/"
+dry_forest_seed <- "data/seed/df/"
+wet_forest_seed <- "data/seed/wf/"
 
 # authenticate and download NDMI Landsat data from Google drive
 drive_auth()
@@ -44,6 +44,6 @@ compute_sf(dry_forest_seed)
 compute_sf(wet_forest_seed)
 
 # run the statistics script
-source("C:/Users/Bianka/Documents/MSc-Thesis/Analysis/statistics.R")
+source("MSc-Thesis/Analysis/statistics.R")
 
 
