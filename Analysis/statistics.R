@@ -41,6 +41,9 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 1: forest cover + forest connectivity + forest type
   model1 <- lm(richness ~ forest_cover + forest_connectivity + forest_type, data = data)
   summary(model1)
+  
+  library(performance)
+  check_model(model1)
 
   # residual diagnostics plot model 1
   par(mfrow = c(2, 2))
@@ -50,6 +53,8 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 2: forest early succession stage + forest connectivity + forest type
   model2 <- lm(richness ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
   summary(model2)
+  check_model(model2)
+  
 
   # residual diagnostics plot model 2
   par(mfrow = c(2, 2))
@@ -59,6 +64,7 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 3: forest late succession stage + forest connectivity + forest type
   model3 <- lm(richness ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
   summary(model3)
+  check_model(model3)
   
   # residual diagnostics plot model 3
   par(mfrow = c(2, 2))
@@ -113,7 +119,7 @@ data$forest_type         <- as.factor(data$forest_type)
 
 
   # Extract prediction for early successional cover from model2
-  pred_early <- ggpredict(model2, terms = "forest_early_ss")
+  pred_early <- ggpredict(model3, terms = "forest_late_ss")
   
   # Plot with raw points and confidence ribbon
   r <- ggplot(pred_early, aes(x = x, y = predicted)) +
@@ -121,13 +127,16 @@ data$forest_type         <- as.factor(data$forest_type)
     geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
                 alpha = 0.3, fill = "#E9E2CC") +
     geom_point(data = data,
-               aes(x = forest_early_ss, y = richness, color = forest_type),
+               aes(x = forest_late_ss, y = richness, color = forest_type),
                alpha = 0.5) +
     scale_color_manual(values = c("wet" = "#869144", "dry" = "#FED789")) +
     xlab("forest early successional stage (%)") +
     ylab("species richness") +
     theme_minimal() +
-    theme(legend.position = "none") 
+    theme(legend.position = "bottom", 
+          legend.title = element_blank(),
+          axis.title.x = element_text(size = 17),  
+          axis.title.y = element_text(size = 17)) 
 
   ### Biotic dispersal ---------------------------------------------------------
 
@@ -137,6 +146,7 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 1: forest cover + forest connectivity + forest type
   model1 <- lm(dispersal_biotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
   summary(model1)
+  check_model(model1)
   
   # residual diagnostics plot model 1
   par(mfrow = c(2, 2))
@@ -146,6 +156,8 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 2: early + forest connectivity + forest type
   model2 <- lm(dispersal_biotic ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
   summary(model2)
+  check_model(model2)
+  
   
   # residual diagnostics plot model 2
   par(mfrow = c(2, 2))
@@ -155,6 +167,7 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 3: forest late successional stage + forest connectivity + forest type
   model3 <- lm(dispersal_biotic ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
   summary(model3)
+  check_model(model3)
   
   # residual diagnostics plot model 3
   par(mfrow = c(2, 2))
@@ -217,6 +230,7 @@ data$forest_type         <- as.factor(data$forest_type)
   # model 1: forest cover + forest connectivity + forest type
   model1 <- lm(dispersal_abiotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
   summary(model1)
+  check_model(model1)
   
   # residual diagnostics plot model 1
   par(mfrow = c(2, 2))
@@ -363,41 +377,143 @@ data$forest_type         <- as.factor(data$forest_type)
   # Combine plots in a grid
   wrap_plots(plots, ncol = 3)
   
+  # Extract prediction for early successional cover from model2
+  pred_early <- ggpredict(model1, terms = "forest_cover")
+  
+  # Plot with raw points and confidence ribbon
+  g <- ggplot(pred_early, aes(x = x, y = predicted)) +
+    geom_line(color = "#CD5733", size = 1) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+                alpha = 0.3, fill = "#E9E2CC") +
+    geom_point(data = data,
+               aes(x = forest_cover, y = guild_generalist, color = forest_type),
+               alpha = 0.5) +
+    scale_color_manual(values = c("wet" = "#869144", "dry" = "#FED789")) +
+    xlab("forest cover (%)") +
+    ylab("generalist guild") +
+    theme_minimal() +
+    theme(legend.position = "bottom", 
+          legend.title = element_blank(),
+          axis.title.x = element_text(size = 12),  
+          axis.title.y = element_text(size = 12)) 
+  
   
   ### Shadetolerant guild ------------------------------------------------------
 
-  # transformation of shadetolerant guild to improve the model's fit
-  n <- nrow(data)
-  data$guild_shadetolerant <- (data$guild_shadetolerant * (n - 1) + 0.5) / n
-  data$guild_shadetolerant <- data$guild_shadetolerant^(1/3) 
-
-  # zero inflated model
-  # model 1: forest cover + forest connectivity + forest type
-  model1 <- betareg(guild_shadetolerant ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  library(gamlss)
+  
+  model1 <- gamlss(
+    guild_shadetolerant ~ forest_cover + forest_connectivity + forest_type,
+    family = BEZI,  # zero-inflated beta
+    data = data
+  )
   summary(model1)
+  
+  model2 <- gamlss(
+    guild_shadetolerant ~ forest_early_ss + forest_connectivity + forest_type,
+    family = BEZI,  # zero-inflated beta
+    data = data
+  )
+  summary(model2)
+  
+  model3 <- gamlss(
+    guild_shadetolerant ~ forest_late_ss + forest_connectivity + forest_type,
+    family = BEZI,  # zero-inflated beta
+    data = data
+  )
+  summary(model3)
   
   # residual diagnostics plot model 1
   par(mfrow = c(2, 2))
   plot(model1)
   mtext("shadetolerant guild ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
   
-  # model 2: early + forest connectivity + forest type
-  model2 <- betareg(guild_shadetolerant ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
-  summary(model2)
   
-  # residual diagnostics plot model 2
-  par(mfrow = c(2, 2))
-  plot(model2)
-  mtext("shadetolerant guild ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  # extract coefficients and SEs for the mean (mu) part
+  coef_model1 <- coef(model1, what = "mu")
+  se_model1 <- sqrt(diag(vcov(model1, what = "mu")))
   
-  # model 3: late + forest connectivity + forest type
-  model3 <- betareg(guild_shadetolerant ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
-  summary(model3)
+  coef_model2 <- coef(model2, what = "mu")
+  se_model2 <- sqrt(diag(vcov(model2, what = "mu")))
   
-  # residual diagnostics plot model 3
-  par(mfrow = c(2, 2))
-  plot(model3)
-  mtext("shadetolerant guild ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  coef_model3 <- coef(model3, what = "mu")
+  se_model3 <- sqrt(diag(vcov(model3, what = "mu")))
+  
+  library(ggplot2)
+  
+  # Create a sequence of forest_cover values
+  forest_cover_seq <- seq(min(data$forest_cover), max(data$forest_cover), length.out = 100)
+  
+  # Create a data frame with fixed values for other predictors
+  pred_grid <- data.frame(
+    forest_cover = forest_cover_seq,
+    forest_connectivity = mean(data$forest_connectivity),
+    forest_type = factor("wet", levels = levels(data$forest_type))  # ensure factor levels match
+  )
+  
+  # Predict fitted values using the type = "response" via fitted() and newdata simulation
+  pred_grid$predicted <- fitted(model1, what = "mu")[1:100]  # approximate, safer than newdata
+  
+  # Plot
+  ggplot() +
+    geom_point(data = data, aes(x = forest_cover, y = guild_shadetolerant), alpha = 0.5) +
+    geom_line(data = pred_grid, aes(x = forest_cover, y = predicted), color = "#CD5733", size = 1) +
+    xlab("Forest cover (%)") +
+    ylab("Shadetolerant guild") +
+    theme_minimal()
+  
+  
+  #######################################
+  # stargazer table
+  stargazer(
+    model1, model2, model3,
+    type = "text",
+    coef = list(coef_model1, coef_model2, coef_model3),
+    se = list(se_model1, se_model2, se_model3),
+    dep.var.labels = "Guild Shade-tolerant",
+    column.labels = c("Model 1", "Model 2", "Model 3"),
+    covariate.labels = names(coef_model1),
+    no.space = TRUE,
+    single.row = TRUE
+  )
+  
+
+  # # transformation of shadetolerant guild to improve the model's fit
+  # n <- nrow(data)
+  # data$guild_shadetolerant <- (data$guild_shadetolerant * (n - 1) + 0.5) / n
+  # data$guild_shadetolerant <- data$guild_shadetolerant^(1/3) 
+  # 
+  # 
+  # # zero inflated model
+  # # model 1: forest cover + forest connectivity + forest type
+  # model1 <- betareg(guild_shadetolerant ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  # summary(model1)
+  # 
+  # # residual diagnostics plot model 1
+  # par(mfrow = c(2, 2))
+  # plot(model1)
+  # mtext("shadetolerant guild ~ forest cover + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  # 
+  # 
+  # # model 2: early + forest connectivity + forest type
+  # model2 <- betareg(guild_shadetolerant ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  # summary(model2)
+  # 
+  # # residual diagnostics plot model 2
+  # par(mfrow = c(2, 2))
+  # plot(model2)
+  # mtext("shadetolerant guild ~ forest early ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
+  # 
+  # 
+  # 
+  # # model 3: late + forest connectivity + forest type
+  # model3 <- betareg(guild_shadetolerant ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
+  # summary(model3)
+  # 
+  # # residual diagnostics plot model 3
+  # par(mfrow = c(2, 2))
+  # plot(model3)
+  # mtext("shadetolerant guild ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
 
   # table of coefficients
   stargazer(model1, model2, model3, 
@@ -475,7 +591,7 @@ data$forest_type         <- as.factor(data$forest_type)
   model3 <- lm(guild_pioneer ~ forest_late_ss + forest_connectivity +  forest_type, data = data)
   summary(model3)
   
-  y# residual diagnostics plot model 3
+  # residual diagnostics plot model 3
   par(mfrow = c(2, 2))
   plot(model3)
   mtext("pioneer ~ forest late ss + forest connectivity + forest type", outer = TRUE, line = -1.5, cex = 1.5)
@@ -528,7 +644,7 @@ data$forest_type         <- as.factor(data$forest_type)
   wrap_plots(plots, ncol = 3)
   
 
-#  PEARSON CORRELATION ---------------------------------------------------------
+#  SPEARMAN CORRELATION --------------------------------------------------------
   
   df <- all_factors %>% rename("forest early successional stage (%)" = "forest_early_ss",
                                "forest late successional stage (%)" = "forest_late_ss",
@@ -554,7 +670,6 @@ data$forest_type         <- as.factor(data$forest_type)
                              "forest_type")
   
   exp <- c( "forest early successional stage (%)",
-            "forest late successional stage (%)",
             "forest cover (%)",
             "forest connectivity")
   
@@ -571,7 +686,6 @@ data$forest_type         <- as.factor(data$forest_type)
   
   # correlation matrix for all numeric variables within wet/dry
   my_order <- c("forest early successional stage (%)",
-                "forest late successional stage (%)",
                 "forest cover (%)",
                 "forest connectivity",
                 "richness",
@@ -584,48 +698,64 @@ data$forest_type         <- as.factor(data$forest_type)
   
   get_cor_long_all <- function(df, forest_label, order_vars) {
     num_df <- df %>% dplyr::select(where(is.numeric))
-    cor_mat <- cor(num_df, use = "pairwise.complete.obs")
+    var_names <- colnames(num_df)
     
-    cor_long <- as.data.frame(as.table(cor_mat))
-    colnames(cor_long) <- c("Var1", "Var2", "Correlation")
+    # run cor.test() for all pairs
+    cor_results <- expand.grid(Var1 = var_names, Var2 = var_names) %>%
+      dplyr::filter(Var1 != Var2) %>%
+      rowwise() %>%
+      mutate(
+        test = list(cor.test(num_df[[Var1]], num_df[[Var2]], method = "spearman")),
+        Correlation = test$estimate,
+        p.value = test$p.value
+      ) %>%
+      ungroup()
     
-    # apply ordering
-    cor_long$Var1 <- factor(cor_long$Var1, levels = order_vars)
-    cor_long$Var2 <- factor(cor_long$Var2, levels = order_vars)
+    # add significance stars
+    cor_results <- cor_results %>%
+      mutate(sig = case_when(
+        p.value < 0.01 ~ "***",
+        p.value < 0.05  ~ "**",
+        p.value < 0.1  ~ "*",
+        TRUE ~ ""
+      )) %>%
+      mutate(label = paste0(round(Correlation, 2), sig))
+
+        # ordering + forest label
+    cor_results$Var1 <- factor(cor_results$Var1, levels = order_vars)
+    cor_results$Var2 <- factor(cor_results$Var2, levels = order_vars)
+    cor_results$forest_type <- forest_label
     
-    cor_long$forest_type <- forest_label
-    return(cor_long)
+    return(cor_results %>% dplyr::select(-test))
   }
   
-  # apply to wet and dry
   cor_wet_all <- get_cor_long_all(wet_data, "wet", my_order)
   cor_dry_all <- get_cor_long_all(dry_data, "dry", my_order)
   
   cor_both_all <- bind_rows(cor_wet_all, cor_dry_all)
   
-  # plot heatmap
-  ggplot(cor_both_all, aes(x = Var2, y = Var1, fill = Correlation)) +
+  # Keep lower triangle only
+  cor_both_all_filtered <- cor_both_all %>%
+    filter(as.numeric(Var1) > as.numeric(Var2)) %>% 
+    filter(!(Var1 == "forest cover (%)" | Var1 == "forest connectivity")) %>% 
+    filter(Var2 == "forest early successional stage (%)" | Var2 == "forest cover (%)" | Var2 == "forest connectivity")
+  
+  ggplot(cor_both_all_filtered, aes(x = Var2, y = Var1, fill = Correlation)) +
     geom_tile(color = "white") +
-    geom_text(aes(label = round(Correlation, 2)), color = "black", size = 3) +
-    scale_fill_gradient2(low = "#DCCB95", mid = "white", high = "#CD5733", midpoint = 0) +
+    geom_text(aes(label = label), color = "black", size = 3) +   # use label with stars
+    scale_fill_gradient2(low = "#CD5733", mid = "white", high = "#476F84", midpoint = 0) +
     facet_wrap(~ forest_type) +
     theme_minimal() +
     labs(
-      title = "Correlation matrix",
-      fill = "Pearson r"
+      fill = "rho"
     ) +
-    xlab("") +
+    xlab("* p < 0.1, ** p < 0.05, *** p < 0.01") +
     ylab("") +
-    # color the axis labels
-    scale_x_discrete(labels = setNames(
-      paste0(my_order), my_order
-    )) +
-    scale_y_discrete(labels = setNames(
-      paste0(my_order), my_order
-    )) +
+    scale_x_discrete(labels = setNames(paste0(my_order), my_order)) +
+    scale_y_discrete(labels = setNames(paste0(my_order), my_order)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
     theme(
-      axis.text.x = element_text(color = ifelse(my_order %in% exp, "black", "brown4"), angle = 45, hjust = 1, vjust = 1),
-      axis.text.y = element_text(color = ifelse(my_order %in% exp, "black", "brown4"))
+      axis.title.x = element_text(vjust = 0.5, hjust = 1),   # your existing axis title tweak
+      axis.text.x = element_text(size = 10),                 # increase x-axis values
+      axis.text.y = element_text(size = 10)                  # increase y-axis values
     )
-  
-  

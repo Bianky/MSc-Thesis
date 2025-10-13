@@ -23,7 +23,7 @@ compute_ff <- function(data_folder){
   vals[vals == 1] <- 101 # set never deforested areas to have a value of 101
   
   # if value is not 100, 101, subtract it from 2022 to calculate forest age
-  vals[!(vals %in% c(100, 101))] <- 2022 - vals[!(vals %in% c(100, 101))]
+  vals[!(vals %in% c(100, 101))] <- 2023 - vals[!(vals %in% c(100, 101))]
   
   vals[vals < 30 | vals == 30 ] <- 1
   vals[vals == 101] <- 2 # never deforested area
@@ -85,13 +85,13 @@ compute_ff <- function(data_folder){
   values(forest_mosaic) <- vals
   
   # calculate forest area
-  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1600, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
+  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(pland = pland/100)
   
   # calculate forest connectivity
-  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1600, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
+  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(enn_mn = replace_na(enn_mn, 0), 
