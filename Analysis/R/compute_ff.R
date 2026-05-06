@@ -91,25 +91,23 @@ compute_ff <- function(data_folder){
     mutate(pland = pland/100)
   
   # calculate forest connectivity
-  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_enn_mn", "lsm_c_np")) %>% 
+  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_ai")) %>% 
     filter(class == 1) %>% 
-    pivot_wider(names_from = metric, values_from = value) %>% 
-    mutate(enn_mn = replace_na(enn_mn, 0), 
-           total_enn = enn_mn * np, 
-           enn_mn_inv = 1/enn_mn)
+    pivot_wider(names_from = metric, values_from = value) 
   
   # merge all variables together
   age_area <- full_join(age, area)
   age_area_perc <- full_join(age_area, age_percentage)
   forest_factors <- full_join(age_area_perc, connectivity) %>%
-    dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, np, enn_mn, enn_mn_inv, total_enn, early, late) %>% 
+    dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, ai, early, late) %>% 
     rename(ID = plot_id, 
            forest_cover = pland,
-           forest_connectivity = enn_mn_inv,
+           forest_connectivity = ai,
            forest_early_ss = early,
            forest_late_ss = late
-           ) %>% 
+    ) %>% 
     mutate(forest_type = ifelse(grepl("DR", ID), "dry", "wet"))
+  
     
   
   write.csv(forest_factors, file.path(data_folder, "11_forest_factors.csv"))

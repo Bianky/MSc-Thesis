@@ -2,15 +2,15 @@
 # DATA LOADING ------------------------------------------------------------------
 
 # seed factors
-seed_factors_wf <- read.csv("data/seed/wf/11_seed_factors.csv")
-seed_factors_df <- read.csv("data/seed/df/11_seed_factors.csv")
+seed_factors_wf <- read.csv("MSc-Thesis/Analysis/data/seed/wf/11_seed_factors.csv")
+seed_factors_df <- read.csv("MSc-Thesis/Analysis/data/seed/df/11_seed_factors.csv")
 
 seed_factors_all <- full_join(seed_factors_df, seed_factors_wf) %>% 
   dplyr::select(-X)
 
 # forest factors
-forest_factors_wf <- read.csv("data/forest/wf/11_forest_factors.csv")
-forest_factors_df <- read.csv("data/forest/df/11_forest_factors.csv")
+forest_factors_wf <- read.csv("MSc-Thesis/Analysis/data/forest/wf/11_forest_factors.csv")
+forest_factors_df <- read.csv("MSc-Thesis/Analysis/data/forest/df/11_forest_factors.csv")
 
 forest_factors_all <- full_join(forest_factors_df, forest_factors_wf) %>% 
   dplyr::select(-X)
@@ -23,7 +23,10 @@ all_factors <- full_join(seed_factors_all, forest_factors_all) %>%
 # DATA PREPARATION -------------------------------------------------------------
 
 data <- all_factors %>% 
-  dplyr::select(richness, dispersal_biotic, dispersal_abiotic, guild_shadetolerant, guild_pioneer, guild_generalist, forest_cover, forest_connectivity, forest_early_ss, forest_late_ss, forest_type)
+  dplyr::select(ID, Month, richness, abundance, dispersal_biotic, dispersal_abiotic, guild_shadetolerant, guild_pioneer, guild_generalist, forest_cover, forest_connectivity, forest_early_ss, forest_late_ss, forest_type) %>% 
+  mutate(season = ifelse(forest_type == "Wet", 
+                         ifelse(Month %in% c("February", "March", "April"), "dry", "wet"), 
+                         ifelse(Month %in% c("May", "June", "July", "August", "September", "October"), "wet", "dry")))
 
 # predictor variables
 data$forest_cover        <- as.numeric(scale(data$forest_cover))
@@ -31,9 +34,110 @@ data$forest_early_ss     <- as.numeric(scale(data$forest_early_ss))
 data$forest_late_ss      <- as.numeric(scale(data$forest_late_ss))
 data$forest_connectivity <- as.numeric(scale(data$forest_connectivity))
 data$forest_type         <- as.factor(data$forest_type)
+data$Month               <- as.factor(data$Month)
+data$season              <- as.factor(data$season)
 
+data <- data %>% 
+  filter(forest_type == "wet")
 
 # MODELS -----------------------------------------------------------------------
+
+  ### Abundance ---------------------------------------------------------------- 
+  data$abundance <- log10(data$abundance + 1)
+  hist(data$abundance)
+
+  model1 <- lm(abundance ~ forest_cover  + forest_type, data = data)
+  summary(model1)
+  #library(performance)
+  check_model(model1)
+  vif(model1)
+  
+  #model2 <- lm(abundance ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  #summary(model2)
+  #check_model(model2)
+  
+   library(lmerTest)
+   modela <- lmer(abundance ~ forest_cover*season + forest_connectivity*season  + season + (1|ID), data = data)
+   summary(modela) 
+   check_model(modela)
+   
+   # ANOVA
+   modelA_ml <- lmer(abundance ~ forest_cover + forest_connectivity + season + (1|ID), data = data, REML = FALSE)
+   modelB_ml <- lmer(abundance ~ forest_cover + forest_connectivity +  (1|season) + (1|ID), data = data, REML = FALSE)
+   
+   anova(modelB_ml, modelA_ml)
+
+  
+  ### Richness ----------------------------------------------------------------- 
+  data$richness <- log(data$richness + 1)
+  hist(data$richness)
+   
+  #model1 <- lm(richness ~ forest_cover + forest_connectivity + forest_type, data = data)
+  #summary(model1)
+  #model2 <- lm(richness ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  #summary(model2)
+    
+    library(lmerTest)
+    modela <- lmer(richness ~ forest_cover + forest_connectivity + forest_type + (1|ID), data = data)
+    summary(modela) 
+    check_model(modela)
+    
+    # ANOVA
+    modelA_ml <- lmer(richness ~ forest_cover + forest_connectivity + forest_type + Month + (1|ID), data = data, REML = FALSE)
+    modelB_ml <- lmer(richness ~ forest_cover + forest_connectivity + forest_type + (1|Month) + (1|ID), data = data, REML = FALSE)
+    
+    anova(modelB_ml, modelA_ml)
+
+  
+  ### Biotic dispersal --------------------------------------------------------- 
+  data$dispersal_biotic <- sqrt(data$dispersal_biotic)
+  
+  model1 <- lm(dispersal_biotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  model2 <- lm(dispersal_biotic ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  
+  ### Abiotic dispersal --------------------------------------------------------
+  data$dispersal_abiotic <- (data$dispersal_abiotic)^2
+  
+  model1 <- lm(dispersal_abiotic ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  model2 <- lm(dispersal_abiotic ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  
+  ### Generalist guild ---------------------------------------------------------
+  model1 <- lm(guild_generalist ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  model2 <- lm(guild_generalist ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+  
+  
+  ### Shadetolerant guild ------------------------------------------------------
+  library(gamlss)
+  model1 <- gamlss(
+    guild_shadetolerant ~ forest_cover + forest_connectivity + forest_type,
+    family = BEZI,  # zero-inflated beta
+    data = data
+  )
+  summary(model1)
+  model2 <- gamlss(
+    guild_shadetolerant ~ forest_early_ss + forest_connectivity + forest_type,
+    family = BEZI,  # zero-inflated beta
+    data = data
+  )
+  summary(model2)
+  
+  
+  ### Pioneer guild ------------------------------------------------------------
+  data$guild_pioneer <- log(data$guild_pioneer + 1) 
+  
+  model1 <- lm(guild_pioneer ~ forest_cover + forest_connectivity +  forest_type, data = data)
+  summary(model1)
+  model2 <- lm(guild_pioneer ~ forest_early_ss + forest_connectivity +  forest_type, data = data)
+  summary(model2)
+
 
 
   ### Richness ----------------------------------------------------------------- 
