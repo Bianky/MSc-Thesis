@@ -23,8 +23,8 @@ compute_sf_season <- function(data_folder){
   # calculate the percentage of each dispersal mode per researched plot
   dispersal <- seeds %>%
     distinct(ID, season, Species, .keep_all = T) %>% 
-    count(ID, `Dispersal mode`, name = "dispersal_n") %>%
-    group_by(ID) %>% 
+    count(ID, season, `Dispersal mode`, name = "dispersal_n") %>%
+    group_by(ID, season) %>% 
     mutate(dispersal_sum = sum(dispersal_n),
            dispersal_n = (dispersal_n/dispersal_sum)) %>% 
     ungroup() %>% 
@@ -37,8 +37,8 @@ compute_sf_season <- function(data_folder){
   # calculate the percentage of each guild per researched plot
   guild <- seeds %>%
     distinct(ID, season, Species, .keep_all = T) %>% 
-    count(ID, Guild, name = "guild_n") %>%
-    group_by(ID) %>% 
+    count(ID, season, Guild, name = "guild_n") %>%
+    group_by(ID, season) %>% 
     mutate(guild_sum = sum(guild_n),
            guild_n = (guild_n/guild_sum)) %>% 
     ungroup() %>% 
@@ -49,8 +49,8 @@ compute_sf_season <- function(data_folder){
            guild_NA = `NA`)
   
   # join all variables into one data frame
-  seed_factors <- full_join(richness, dispersal)
-  seed_factors <- full_join(seed_factors, guild)
+  seed_factors <- full_join(richness, dispersal, by = c("ID", "season"))
+  seed_factors <- full_join(seed_factors, guild, by = c("ID", "season"))
   
   write.csv(seed_factors, file.path(data_folder, "11_seed_factors.csv"))
 }

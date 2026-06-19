@@ -49,18 +49,18 @@ avocado <- function(data_folder) {
   
   # need for a high computational power
   
-  #ncl <- detectCores() - 2
+  ncl <- detectCores() - 2
   
-  #PLUGPhenAnoRFDMapPLUS(s = NDMIbrick, dates = NDMIbrick_dates, h = 1, phenref = NDMIbrick_fref, anop = c(1:nlyr(NDMIbrick)), nCluster = ncl, outname = file.path(data_folder, '07_landsat_1992_2022_AnomProb.tif'), datatype = 'INT2S')
+  PLUGPhenAnoRFDMapPLUS(s = NDMIbrick, dates = NDMIbrick_dates, h = 1, phenref = NDMIbrick_fref, anop = c(1:nlyr(NDMIbrick)), nCluster = ncl, outname = file.path(data_folder, '07_landsat_1992_2022_AnomProb.tif'), datatype = 'INT2S')
   
   # loading of anomaly and likelihoods data
-  #ano.rfd.st <- rast(file.path(data_folder, "07_landsat_1992_2022_AnomProb.tif")) # example to load your own data
+  ano.rfd.st <- rast(file.path(data_folder, "07_landsat_1992_2022_AnomProb.tif")) # example to load your own data
   
   # disturbance computation
-  #dist.reg.map(
-  #  s = ano.rfd.st, dates = NDMIbrick_dates, rfd = 0.99, dstrb_thr = 730, rgrow_thr = 365, nCluster = ncl,
-  #  cdates = 3, outname = file.path(data_folder, "08_landsat_1992_2022_DistReg.tif"), datatype = 'INT2S')
-  # distrb_thr = 730 to avoid for drought disturbance detection such as el nino impacts
-  # rgrow_thr = 365 to avoid for regrowth detection of annually grown crops
-  # rfd = 99 to have high certainty to detect deforestation disturbances only
+  dist.reg.map(
+    s = ano.rfd.st, dates = NDMIbrick_dates, rfd = 0.99, dstrb_thr = 730, rgrow_thr = 365, nCluster = ncl,
+    cdates = 3, outname = file.path(data_folder, "08_landsat_1992_2022_DistReg.tif"), datatype = 'INT2S')
+   #distrb_thr = 730 to avoid for drought disturbance detection such as el nino impacts
+   #rgrow_thr = 365 to avoid for regrowth detection of annually grown crops
+   #rfd = 99 to have high certainty to detect deforestation disturbances only
 }

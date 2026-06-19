@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?><gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" creator="eTrex 10" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/WaypointExtension/v1 http://www8.garmin.com/xmlschemas/WaypointExtensionv1.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd"><metadata><link href="http://www.garmin.com"><text>Garmin International</text></link><time>2020-01-05T14:14:18Z</time></metadata>
+<wpt lat="16.090796" lon="-90.991118"><ele>178.409943</ele><time>2022-04-04T15:17:40Z</time><name>MX_WT_FC1</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.099444" lon="-90.989239"><ele>176.045731</ele><time>2022-04-04T19:00:44Z</time><name>MX_WT_FC2</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.093890" lon="-90.978963"><ele>171.552292</ele><time>2022-04-05T14:29:57Z</time><name>MX_WT_FC3</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.090478" lon="-90.979377"><ele>164.662720</ele><time>2022-04-05T15:38:23Z</time><name>MX_WT_FC4</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.097593" lon="-91.010397"><ele>184.554337</ele><time>2022-04-15T15:58:42Z</time><name>MX_WT_FC5</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.083449" lon="-90.973628"><ele>173.061218</ele><time>2022-04-11T17:42:34Z</time><name>MX_WT_FC6</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.084639" lon="-90.973080"><ele>170.322464</ele><time>2022-04-11T15:35:29Z</time><name>MX_WT_FC7</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.087577" lon="-90.974254"><ele>177.834518</ele><time>2022-04-11T13:31:13Z</time><name>MX_WT_FC8</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.086207" lon="-90.974142"><ele>172.382309</ele><time>2022-04-11T13:56:24Z</time><name>MX_WT_FC9</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.094980" lon="-90.975376"><ele>167.494247</ele><time>2022-04-14T15:47:55Z</time><name>MX_WT_FC10</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.092672" lon="-90.975349"><ele>165.162399</ele><time>2022-04-08T15:29:34Z</time><name>MX_WT_FC11</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.090166" lon="-90.975256"><ele>177.000732</ele><time>2022-04-08T13:07:20Z</time><name>MX_WT_FC12</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.082946" lon="-90.985690"><ele>212.253098</ele><time>2022-04-13T17:51:48Z</time><name>MX_WT_FC13</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.078289" lon="-90.976120"><ele>187.591904</ele><time>2022-04-12T14:27:15Z</time><name>MX_WT_FC14</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.077198" lon="-90.984139"><ele>183.170441</ele><time>2022-04-12T17:23:36Z</time><name>MX_WT_FC15</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.076510" lon="-91.001898"><ele>199.581085</ele><time>2022-04-13T15:22:27Z</time><name>MX_WT_FC16</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.076924" lon="-91.000754"><ele>201.444168</ele><time>2022-04-13T12:31:16Z</time><name>MX_WT_FC17</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.079247" lon="-90.988971"><ele>189.356354</ele><time>2022-04-07T12:19:30Z</time><name>MX_WT_FC18</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.093141" lon="-90.966780"><ele>171.306168</ele><time>2022-04-06T14:37:29Z</time><name>MX_WT_FC19</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.097287" lon="-90.967015"><ele>167.060196</ele><time>2022-04-06T15:28:16Z</time><name>MX_WT_FC20</name><cmt></cmt><sym>Flag, Blue</sym></wpt></gpx>
+

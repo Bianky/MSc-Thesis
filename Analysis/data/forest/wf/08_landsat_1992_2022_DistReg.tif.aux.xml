@@ -1,0 +1,60 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>lyr.1</Description>
+    <Histograms>
+      <HistItem>
+        <HistMin>1991.51724137931</HistMin>
+        <HistMax>2020.48275862069</HistMax>
+        <BucketCount>29</BucketCount>
+        <IncludeOutOfRange>0</IncludeOutOfRange>
+        <Approximate>0</Approximate>
+        <HistCounts>409|4367|1192|2181|693|1500|3782|1391|1333|704|184|288|450|248|141|349|398|560|559|370|260|138|402|151|168|172|193|133|106</HistCounts>
+      </HistItem>
+    </Histograms>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <Description>lyr.2</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <Description>lyr.3</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="4">
+    <Description>lyr.4</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="5">
+    <Description>lyr.5</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="6">
+    <Description>lyr.6</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="7">
+    <Description>lyr.7</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="8">
+    <Description>lyr.8</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="9">
+    <Description>lyr.9</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="10">
+    <Description>lyr.10</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="11">
+    <Description>lyr.11</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="12">
+    <Description>lyr.12</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="13">
+    <Description>lyr.13</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="14">
+    <Description>lyr.14</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="15">
+    <Description>lyr.15</Description>
+  </PAMRasterBand>
+  <PAMRasterBand band="16">
+    <Description>lyr.16</Description>
+  </PAMRasterBand>
+</PAMDataset>

@@ -9,7 +9,7 @@ compute_ff <- function(data_folder){
   
   plots <- st_transform(plots, crs = 6372) # reproject to a crs with m unit
   
-  plots$buffer <- st_buffer(plots$geometry, dist = 1000, endCapStyle = 'ROUND') # create a research unit consisting of points and their buffer
+  plots$buffer <- st_buffer(plots$geometry, dist = 500, endCapStyle = 'ROUND') # create a research unit consisting of points and their buffer
   
   # load in forest mosaic
   forest_mosaic <- rast(file.path(data_folder, "10_forest_mosaic.tif"))[[18]]
@@ -85,13 +85,13 @@ compute_ff <- function(data_folder){
   values(forest_mosaic) <- vals
   
   # calculate forest area
-  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
+  area <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 500, directions = 8, what = c("lsm_c_ca", "lsm_c_pland")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) %>% 
     mutate(pland = pland/100)
   
   # calculate forest connectivity
-  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 1000, directions = 8, what =  c("lsm_c_ai")) %>% 
+  connectivity <- sample_lsm(forest_mosaic, plots$geometry, plot_id = plots$ID, shape = "circle", size = 500, directions = 8, what =  c("lsm_c_ai")) %>% 
     filter(class == 1) %>% 
     pivot_wider(names_from = metric, values_from = value) 
   

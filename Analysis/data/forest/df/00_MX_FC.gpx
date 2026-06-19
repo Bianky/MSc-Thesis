@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?><gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" creator="eTrex 10" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/WaypointExtension/v1 http://www8.garmin.com/xmlschemas/WaypointExtensionv1.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd"><metadata><link href="http://www.garmin.com"><text>Garmin International</text></link><time>2020-01-05T14:14:18Z</time></metadata>
+<wpt lat="16.658573" lon="-95.003176"><ele>133.998154</ele><time>2020-02-02T00:24:12Z</time><name>MX_DR_FC1</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.650978" lon="-95.008337"><ele>116.617691</ele><time>2020-02-02T00:30:34Z</time><name>MX_DR_FC2</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.649346" lon="-95.006420"><ele>110.655228</ele><time>2020-02-02T00:31:34Z</time><name>MX_DR_FC3</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.661163" lon="-95.017584"><ele>111.802643</ele><time>2020-02-02T00:32:45Z<time><name>MX_DR_FC4</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.663428" lon="-95.014999"><ele>116.491287</ele><time>2020-02-02T00:38:33Z</time><name>MX_DR_FC5</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.662797" lon="-95.019434"><ele>106.610725</ele><time>2020-01-29T17:58:09Z</time><name>MX_DR_FC6</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.663643" lon="-95.021311"><ele>104.035049</ele><time>2020-01-29T20:35:11Z</time><name>MX_DR_FC7</name><cmt></cmt><sym>Flag, Blue</sym></wpt> 
+<wpt lat="16.664542" lon="-95.013110"><ele>131.323792</ele><time>2020-01-30T20:40:17Z</time><name>MX_DR_FC8</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.661400" lon="-95.006404"><ele>96.331863</ele><time>2020-02-12T13:08:07Z</time><name>MX_DR_FC9</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.661658" lon="-95.004408"><ele>105.256844</ele><time>2020-02-12T15:49:37Z</time><name>MX_DR_FC10</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.660593" lon="-95.001803"><ele>105.256844</ele><time>2020-02-12T15:49:37Z</time><name>MX_DR_FC11</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.659119" lon="-94.999146"><ele>99.722420</ele><time>2020-02-12T20:05:38Z</time><name>MX_DR_FC12</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.656925" lon="-94.996878"><ele>105.850044</ele><time>2020-02-13T21:03:36Z</time><name>MX_DR_FC13</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.655969" lon="-94.997330"><ele>104.456573</ele><time>2020-02-13T16:29:54Z</time><name>MX_DR_FC14</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.659193" lon="-94.999412"><ele>102.683380</ele><time>2022-01-28T22:16:49Z</time><name>MX_DR_FC15</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.650208" lon="-95.009667"><ele>127.922043</ele><time>2022-01-24T17:26:59Z</time><name>MX_DR_FC16</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.648848" lon="-95.009174"><ele>119.997406</ele><time>2022-01-28T15:34:07Z</time><name>MX_DR_FC17</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.649999" lon="-95.009547"><ele>118.790382</ele><time>2022-01-17T14:54:21Z</time><name>MX_DR_FC18</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.641492" lon="-95.011243"><ele>79.259232</ele><time>2022-02-09T18:11:44Z</time><name>MX_DR_FC19</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.652934" lon="-95.011008"><ele>96.464874</ele><time>2022-02-08T20:24:47Z</time><name>MX_DR_FC20</name><cmt></cmt><sym>Flag, Blue</sym></wpt>
+<wpt lat="16.657686" lon="-95.021283"><ele>115.222336</ele><time>2022-02-08T16:19:48Z</time><name>MX_DR_FC21</name><cmt></cmt><sym>Flag, Blue</sym></wpt></gpx>
+
