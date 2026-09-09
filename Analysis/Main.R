@@ -2,8 +2,10 @@
 packages <- c(
   "googledrive", "tidyverse",  "terra", "npphen", "raster", "RColorBrewer", 
   "rts", "lubridate", "dplyr", "parallel", "sf", "readxl", "landscapemetrics", 
-  "car", "stargazer", "ggeffects", "patchwork", "betareg"
+  "car", "stargazer", "ggeffects", "patchwork", "betareg", "performance", "lmerTest",
+  "MuMIn", "spdep", "tmap", "Hmisc"
 )
+
 
 for (pkg in packages) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -43,13 +45,17 @@ compute_ff(wet_forest)
 compute_sf(dry_forest_seed)
 compute_sf(wet_forest_seed)
 
+# Calculate seed variables per season
 compute_sf_season(dry_forest_seed)
 compute_sf_season(wet_forest_seed)
 
-compute_sf_month(dry_forest_seed)
-compute_sf_month(wet_forest_seed)
+# run the statistics
+source("MSc-Thesis/Analysis/statistics/correlation.R")
+source("MSc-Thesis/Analysis/statistics/ttests.R")
+source("MSc-Thesis/Analysis/statistics/models.R")
+source("MSc-Thesis/Analysis/statistics/Moran's I.R")
+source("MSc-Thesis/Analysis/statistics/figures.R")
 
-# run the statistics script
-source("MSc-Thesis/Analysis/statistics.R")
+
 
 

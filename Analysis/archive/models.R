@@ -25,7 +25,6 @@ all_factors <- full_join(seed_factors_all, forest_factors_all) %>%
 data <- all_factors %>% 
   dplyr::select(ID, 
                 #season,
-                Month, 
                 richness, abundance, dispersal_biotic, dispersal_abiotic, guild_shadetolerant, guild_pioneer, guild_generalist, forest_cover, forest_connectivity, forest_early_ss, forest_late_ss, forest_type)
 
 # predictor variables
@@ -36,43 +35,44 @@ data$forest_connectivity <- as.numeric(scale(data$forest_connectivity))
 data$forest_type         <- as.factor(data$forest_type)
 
 data$season <- as.factor(data$season)
-data$Month <- as.factor(data$Month)
 
 # MODELS -----------------------------------------------------------------------
-library(performance)
-library(lmerTest)
-library(MuMIn)
-library(glmmTMB)
 
 # predictor var prep
 data$abundance <- log1p(data$abundance)
 
-pred_var <- data$abundance
+pred_var <- data$guild_generalist
 
-# regular lm
+# lm 
 # ------------------------------------------------------------------------------
-lm1 <- lm(pred_var ~ forest_cover + forest_type, data = data)
+lm1 <- lm(pred_var ~ forest_cover + forest_type , data = data)
 summary(lm1)
-#check_model(lm1)
+check_model(lm1)
+vif(lm1)
 
 lm2 <- lm(pred_var ~ forest_connectivity + forest_type, data = data)
 summary(lm2)
+check_model(lm2)
+vif(lm2)
 
 lm3 <- lm(pred_var ~ forest_late_ss + forest_type, data = data)
 summary(lm3)
-
+check_model(lm3)
+vif(lm3)
 
 n <- nrow(data) # shadetolerant
-data$guild_shadetolerant_beta <-
-  (data$guild_shadetolerant * (n - 1) + 0.5) / n
+data$dispersal_biotic_beta <-
+  (data$dispersal_biotic * (n - 1) + 0.5) / n
 
 s1 <- glmmTMB(
-  guild_shadetolerant_beta ~ forest_late_ss + forest_type,
+  dispersal_biotic_beta ~ forest_late_ss + forest_type,
   family = beta_family(),
   data = data
 )
 summary(s1)
 check_model(s1)
+
+
 
 
 # dredge function
@@ -88,6 +88,9 @@ get.models(dd, subset = 1)[[1]]
 a <- lmer(pred_var ~ forest_cover + forest_type + season + (1|ID), data = data, REML = F)
 b <- lmer(pred_var ~ forest_cover + forest_type + (1|season) + (1|ID), data = data, REML = F)
 anova(a, b)
+
+pred_var <- data$guild_generalist
+
 
 lmm0 <- lmer(pred_var ~ 1 + (1|ID), data = data, REML = FALSE)
 
@@ -110,7 +113,7 @@ data$guild_shadetolerant_beta <-
   (data$guild_shadetolerant * (n - 1) + 0.5) / n
 
 s2 <- glmmTMB(
-  guild_shadetolerant_beta ~ forest_cover + forest_type + season + (1 | ID),
+  guild_shadetolerant_beta ~ forest_connectivity + forest_type + season + (1 | ID),
   family = beta_family(),
   data = data
 )
@@ -123,7 +126,7 @@ a <- lmer(pred_var ~ forest_cover + forest_type + Month + (1|ID), data = data, R
 b <- lmer(pred_var ~ forest_cover + forest_type + (1|Month) + (1|ID), data = data, REML = F)
 anova(a, b)
 
-pred_var <- data$guild_generalist
+pred_var <- data$guild_pioneer
 
 
 lmm0 <- lmer(pred_var ~ 1 + (1|ID), data = data, REML = FALSE)
@@ -145,7 +148,7 @@ data$guild_shadetolerant_beta <-
   (data$guild_shadetolerant * (n - 1) + 0.5) / n
 
 s3 <- glmmTMB(
-  guild_shadetolerant_beta ~ forest_connectivity + forest_type + Month + (1 | ID),
+  guild_shadetolerant_beta ~ forest_late_ss + forest_type + Month + (1 | ID),
   family = beta_family(),
   data = data
 )
@@ -155,31 +158,35 @@ check_model(s3)
 # lm per season
 # ------------------------------------------------------------------------------
 data_dry <- data %>% filter(season == "dry")
-pred_var <- data_dry$guild_generalist
+pred_var <- data_dry$guild_shadetolerant
 lm_dry02 <- lm(pred_var ~ forest_cover + forest_type, data_dry)
 summary(lm_dry02)
 lm_dry03 <- lm(pred_var ~ forest_connectivity + forest_type, data_dry)
 summary(lm_dry03)
 lm_dry01 <- lm(pred_var ~ forest_late_ss + forest_type, data_dry)
 summary(lm_dry01)
-#check_model(lm_dry01)
+
+check_model(lm_wet02)
+
 
 data_wet <- data %>% filter(season == "wet")
-pred_var <- data_wet$guild_generalist
+data_wet$guild_generalist <- log1p(data_wet$guild_generalist)
+pred_var <- data_wet$dispersal_biotic
 lm_wet02 <- lm(pred_var ~ forest_cover + forest_type, data_wet)
 summary(lm_wet02)
-lm_wet03 <- lm(pred_var ~ forest_connectivity + forest_type, data_wet)
+lm_wet03 <- lm(pred_var ~ forest_connectivity*forest_type, data_wet)
 summary(lm_wet03)
 lm_wet01 <- lm(pred_var ~ forest_late_ss + forest_type, data_wet)
 summary(lm_wet01)
+check_model(lm_wet01)
 
 # shadetolerant
 n <- nrow(data_wet)
-data_wet$guild_shadetolerant_beta <-
-  (data_wet$guild_shadetolerant * (n - 1) + 0.5) / n
+data_wet$guild_generalist_beta <-
+  (data_wet$guild_generalist * (n - 1) + 0.5) / n
 
 s1 <- glmmTMB(
-  guild_shadetolerant_beta ~ forest_connectivity + forest_type,
+  guild_generalist_beta ~ forest_cover + forest_type,
   family = beta_family(),
   data = data_wet
 )

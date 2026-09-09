@@ -1,5 +1,5 @@
 compute_sf <- function(data_folder){
-  # function to compute the seed factors
+  # function to compute the seed attributes
   # data folder is the folder storing data
   
   # load in the seed data
@@ -44,8 +44,8 @@ compute_sf <- function(data_folder){
            guild_NA = `NA`)
   
   # join all variables into one data frame
-  seed_factors <- full_join(richness, dispersal)
-  seed_factors <- full_join(seed_factors, guild)
+  seed_attri <- full_join(richness, dispersal)
+  seed_attri <- full_join(seed_attri, guild)
 
-  write.csv(seed_factors, file.path(data_folder, "11_seed_factors.csv"))
+  write.csv(seed_attri, file.path(data_folder, "11_seed_attri.csv"))
 }

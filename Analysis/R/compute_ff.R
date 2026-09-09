@@ -1,5 +1,5 @@
 compute_ff <- function(data_folder){
-  # function to compute the forest factors
+  # function to compute the forest attributes
   # data_folder is the folder where the data is stored
   
   # forest cover plots coordinates
@@ -98,7 +98,7 @@ compute_ff <- function(data_folder){
   # merge all variables together
   age_area <- full_join(age, area)
   age_area_perc <- full_join(age_area, age_percentage)
-  forest_factors <- full_join(age_area_perc, connectivity) %>%
+  forest_attri <- full_join(age_area_perc, connectivity) %>%
     dplyr::select(plot_id, mean_age, percentage_inside, ca, pland, ai, early, late) %>% 
     rename(ID = plot_id, 
            forest_cover = pland,
@@ -108,8 +108,12 @@ compute_ff <- function(data_folder){
     ) %>% 
     mutate(forest_type = ifelse(grepl("DR", ID), "dry", "wet"))
   
-    
+  forest_attri_sf <- full_join(forest_attri, plots, by = "ID") %>% 
+    dplyr::select(-X) %>% 
+    mutate(geometry = st_as_text(geometry),
+           buffer = st_as_text(buffer))
   
-  write.csv(forest_factors, file.path(data_folder, "11_forest_factors.csv"))
+  write.csv(forest_attri, file.path(data_folder, "11_forest_attri.csv"))
+  write.csv(forest_attri_sf, file.path(data_folder, "11_forest_attri_sf.csv"))
   
 }
