@@ -112,7 +112,7 @@ pred_var <- data_wet$richness
 # lm models
 lm_wet02 <- lm(pred_var ~ forest_cover + forest_type, data_wet)
 summary(lm_wet02)
-lm_wet03 <- lm(pred_var ~ forest_connectivity*forest_type, data_wet)
+lm_wet03 <- lm(pred_var ~ forest_connectivity + forest_type, data_wet)
 summary(lm_wet03)
 lm_wet01 <- lm(pred_var ~ forest_late_ss + forest_type, data_wet)
 summary(lm_wet01)
