@@ -3,7 +3,7 @@ packages <- c(
   "googledrive", "tidyverse",  "terra", "npphen", "raster", "RColorBrewer", 
   "rts", "lubridate", "dplyr", "parallel", "sf", "readxl", "landscapemetrics", 
   "car", "stargazer", "ggeffects", "patchwork", "betareg", "performance", "lmerTest",
-  "MuMIn", "spdep", "tmap", "Hmisc"
+  "MuMIn", "spdep", "tmap", "Hmisc", "corrplot"
 )
 
 
@@ -36,7 +36,7 @@ avocado(wet_forest)
 # Compute forest mosaic
 forest_mosaic(dry_forest)
 forest_mosaic(wet_forest)
-
+ 
 # Calculate forest variables
 compute_ff(dry_forest)
 compute_ff(wet_forest)
@@ -50,6 +50,7 @@ compute_sf_season(dry_forest_seed)
 compute_sf_season(wet_forest_seed)
 
 # run the statistics
+source("MSc-Thesis/Analysis/statistics/table formation.R")
 source("MSc-Thesis/Analysis/statistics/correlation.R")
 source("MSc-Thesis/Analysis/statistics/ttests.R")
 source("MSc-Thesis/Analysis/statistics/models.R")

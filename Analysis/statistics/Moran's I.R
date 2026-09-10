@@ -19,16 +19,6 @@ ff_df <- read_sf("MSc-Thesis/Analysis/data/forest/df/11_forest_attri_sf.csv")%>%
 ff_all <- rbind(ff_df, ff_wf) %>% 
   filter(!(ID == "MX_DR_FC6")) 
 
-# seed attributes
-seed_attri_wf <- read.csv("MSc-Thesis/Analysis/data/seed/wf/11_seed_attri.csv")
-seed_attri_df <- read.csv("MSc-Thesis/Analysis/data/seed/df/11_seed_attri.csv")
-
-seed_attri_all <- full_join(seed_attri_df, seed_attri_wf) %>% 
-  dplyr::select(-X)
-
-# all attributes
-all_attri <- full_join(seed_attri_all, forest_attri_all) %>% 
-  filter(!(ID == "MX_DR_FC6")) 
 
 geom <- ff_all %>% dplyr::select(ID, geometry)
 ff_all <- left_join(geom, all_attri, by = "ID") 

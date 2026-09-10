@@ -17,7 +17,7 @@ forest_mosaic <- function(data_folder) {
   landcover <- rast(file.path(data_folder, "09_ESA_2021_landcover.tif"))
   
   lc <- crop(landcover, aoi)
-  lc <- mask(lc, aoi)
+  lc <- terra::mask(lc, aoi)
   
   # resampling to make sure both rasters align
   lc_resampled <- resample(lc, distreg, method = "near") 
@@ -60,7 +60,7 @@ forest_mosaic <- function(data_folder) {
   distreg$lyr.18 <- app(distreg, last_rgrw)
   
   distreg <- crop(distreg, aoi)
-  distreg <- mask(distreg, aoi)
+  distreg <- terra::mask(distreg, aoi)
   
   # save the new raster as a new .tif file in the data folder
   writeRaster(distreg, file.path(data_folder, "10_forest_mosaic.tif"), datatype = "FLT4S", overwrite=TRUE)

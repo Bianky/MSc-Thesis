@@ -4,13 +4,6 @@
 # ------------------------------------------------------------------------------
 
 # DATA
-# forest attri
-forest_attri_wf <- read.csv("MSc-Thesis/Analysis/data/forest/wf/11_forest_attri.csv")
-forest_attri_df <- read.csv("MSc-Thesis/Analysis/data/forest/df/11_forest_attri.csv")
-
-forest_attri_all <- full_join(forest_attri_df, forest_attri_wf) %>% 
-  dplyr::select(-X)
-
 forest_data <- full_join(forest_attri_df, forest_attri_wf) %>% 
   dplyr::select(-X) %>% 
   filter(!(ID == "MX_DR_FC6")) %>% 
@@ -65,27 +58,6 @@ ggplot(forest_data, aes(forest_type, value, fill = forest_type)) +
 
 # SEED ATTRIBUTES GRAPHS -------------------------------------------------------
 # ------------------------------------------------------------------------------
-
-# DATA
-# seed attributes
-seed_attri_wf <- read.csv("MSc-Thesis/Analysis/data/seed/wf/11_seed_attri.csv")
-seed_attri_df <- read.csv("MSc-Thesis/Analysis/data/seed/df/11_seed_attri.csv")
-
-seed_attri_all <- full_join(seed_attri_df, seed_attri_wf) %>% 
-  dplyr::select(-X)
-
-all_attri <- full_join(seed_attri_all, forest_attri_all) %>% 
-  filter(!(ID == "MX_DR_FC6")) 
-
-# seed attributes - season
-seed_attri_wf_season <- read.csv("MSc-Thesis/Analysis/data/seed/wf/11_seed_attri_season.csv")
-seed_attri_df_season <- read.csv("MSc-Thesis/Analysis/data/seed/df/11_seed_attri_season.csv")
-
-seed_attri_all_season <- full_join(seed_attri_df_season, seed_attri_wf_season) %>% 
-  dplyr::select(-X)
-
-all_attri_season <- full_join(seed_attri_all_season, forest_attri_all) %>% 
-  filter(!(ID == "MX_DR_FC6")) 
 
 
 seed_data <- all_attri %>% 

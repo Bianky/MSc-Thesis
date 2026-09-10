@@ -37,7 +37,7 @@ compute_ff <- function(data_folder){
   for (i in 1:nrow(plots)) {
     current_buffer <- vect(plots$buffer[i, ])
     cropped_raster <- crop(forest_mosaic, current_buffer)
-    cropped_raster <- mask(cropped_raster, current_buffer)
+    cropped_raster <- terra::mask(cropped_raster, current_buffer)
     
     ID <- plots$ID[i]
     rasters_list[[as.character(ID)]] <- cropped_raster
