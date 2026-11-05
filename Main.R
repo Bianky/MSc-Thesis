@@ -14,14 +14,14 @@ for (pkg in packages) {
   library(pkg, character.only = TRUE)
 }
 
-funs <- list.files("MSc-Thesis/Analysis/R/", pattern = "\\.R$", full.names = TRUE)
+funs <- list.files("MSc-Thesis/R/", pattern = "\\.R$", full.names = TRUE)
 lapply(funs, source)
 
-dry_forest <- "MSc-Thesis/Analysis/data/forest/df"
-wet_forest <- "MSc-Thesis/Analysis/data/forest/wf"
+dry_forest <- "MSc-Thesis/data/forest/df"
+wet_forest <- "MSc-Thesis/data/forest/wf"
 
-dry_forest_seed <- "MSc-Thesis/Analysis/data/seed/df"
-wet_forest_seed <- "MSc-Thesis/Analysis/data/seed/wf"
+dry_forest_seed <- "MSc-Thesis/data/seed/df"
+wet_forest_seed <- "MSc-Thesis/data/seed/wf"
 
 # authenticate and download NDMI Landsat data from Google drive
 drive_auth()
@@ -50,12 +50,12 @@ compute_sf_season(dry_forest_seed)
 compute_sf_season(wet_forest_seed)
 
 # run the statistics
-source("MSc-Thesis/Analysis/statistics/table formation.R")
-source("MSc-Thesis/Analysis/statistics/correlation.R")
-source("MSc-Thesis/Analysis/statistics/ttests.R")
-source("MSc-Thesis/Analysis/statistics/models.R")
-source("MSc-Thesis/Analysis/statistics/Moran's I.R")
-source("MSc-Thesis/Analysis/statistics/figures.R")
+source("MSc-Thesis/statistics/table formation.R")
+source("MSc-Thesis/statistics/correlation.R")
+source("MSc-Thesis/statistics/ttests.R")
+source("MSc-Thesis/statistics/models.R")
+source("MSc-Thesis/statistics/Moran's I.R")
+source("MSc-Thesis/statistics/figures.R")
 
 
 
