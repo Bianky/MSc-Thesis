@@ -3,7 +3,7 @@
 *------------------------------------------------------------------------*
 ** @date 2025-06-01
 ** @title Process and download Landsat data collection 2 Level 2
-** @description The script processes and downloads ESA worldcover for the purpose of MSc-thesis.  
+** @description The script processes and downloads ESA worldcover.  
 *------------------------------------------------------------------------*
 */
 
