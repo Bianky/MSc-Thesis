@@ -2,7 +2,7 @@
 *------------------------------------------------------------------------*
 ** @date 2025-05-01
 ** @title Process and download Landsat data collection 2 Level 2
-** @description The script processes and downloads the Landsat Collection 2 Level 2 for the purpose of MSc-thesis.  
+** @description The script processes and downloads the Landsat Collection 2 Level 2.  
 ** This has been done following the AVOCADO package tutorial for continuous monitoring of forest
 ** change dynamics with satellite time series(Decuyper et al., 2022).
 ** @tutorial_url /uuaa/labgrs/proyectos/tutorial-to-the-anomaly-vegetation-change-detection-avocado
